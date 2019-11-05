@@ -1,0 +1,16 @@
+dba.createCluster()
+
+dba.help('getCluster')
+
+dba.configureInstance('myuser@www.example.com:3306')
+dba.configureInstance()
+
+dba.checkInstanceConfiguration() 
+
+Python version 2.7
+
+install mysql
+install mysql shell
+install mysql router
+
+# create user for admin cluster
