@@ -11,3 +11,7 @@ jobs:
       with:
         repository: 'shinhwagk/${{secrets.REPO}}'
         token: ${{ secrets.ACCESS_TOKEN }}
+    - uses: actions/setup-node@v1
+    - run: npm i -g ts-node typescript
+    - run: npm i
+    - run: ts-node triggers/price.ts
