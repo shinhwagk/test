@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        repository: 'shinhwagk/${{secrets.REPO}}'
+        repository: '${{secrets.USER}}/${{secrets.REPO}}'
         token: ${{ secrets.ACCESS_TOKEN }}
     - uses: actions/setup-node@v1
     - run: npm i -g ts-node typescript
