@@ -9,4 +9,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run a one-line script
-      run: git clone --depth=1 https://github.com/shinhwagk/${{ secrets.REPO }}
+      run: git clone --depth=1 https://${{ $secrets.GITHUB_TOKEN }}github.com/shinhwagk/${{ secrets.REPO }} /AAAA
