@@ -15,3 +15,4 @@ jobs:
     - run: npm i -g ts-node typescript
     - run: npm i
     - run: ts-node triggers/price.ts
+    - run: ts-node triggers/stock.ts
