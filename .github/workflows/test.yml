@@ -21,6 +21,9 @@ jobs:
       - run: npm i -g ts-node typescript
       - run: npm i
       - run: echo 111 > abc
-      - run: git add abc
-      - run: git commit -m "test"
-      - run: git push
+      - run: |
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          git add abc
+          git commit -m "test"
+          git push
