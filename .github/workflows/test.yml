@@ -13,7 +13,10 @@ jobs:
         - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-    - run: npm i -g ts-node typescript
-    - run: npm i
+      - name: Show MySQL Variables
+        run: mysql -uroot -p'root' -e "show variables where Variable_name in ('server_id','log_bin','lower_case_table_names','version');"
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: npm i -g ts-node typescript
+      - run: npm i
