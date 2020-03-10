@@ -16,7 +16,7 @@ def appendThreadInfoSheet(ti):
     return req.text
 
 
-def main(thread_file):
+def push(thread_info):
     result = appendThreadInfoSheet(thread_info)
     if result == "0":
         os.exit(0)
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     channel_id = os.environ["channel_id"]
     gas_post_url = os.environ["gas_post_url"]
     thread_info = json.loads(sys.stdin.read())
-    main(thread_info)
+    push(thread_info)
