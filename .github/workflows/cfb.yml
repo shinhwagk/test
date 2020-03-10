@@ -27,6 +27,16 @@ jobs:
           channel_id: ${{ matrix.channel_id }}
       - name: name：enc thread info file
         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
+      - run: |
+          sleep=$[$RANDOM%10]
+          sleep $sleep
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          git add checkpoint
+          git commit -q -m "crawler channel: ${{ matrix.channel_id }}, page:$(cat checkpoint/${{ matrix.channel_id }}/page )"
+          git pull -q;
+          git push;
+          echo "##########################################"
 #       - name: dec thread info file
 #         run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
   step2:
