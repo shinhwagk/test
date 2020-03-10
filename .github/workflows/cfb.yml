@@ -12,16 +12,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          path: bin
           ref: 'cfb'
       - uses: actions/setup-node@v1
       - uses: actions/setup-python@v1
       - run: npm i -g typescript ts-node
       - run: python -m pip install requests
-      - run: mkdir test
+      - run: npm i puppeteer fs-extra
+      - name: dec bin
+        run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
+      - name: step1
+        run: node bin/step1.js
       - name: name：enc thread info file
-        run: find test/ -type f -name '*.json' | while read line; do openssl enc -aes256 -k 123456 -in $line -out "${line}.enc"; rm -f ${line}; done
-      - name: dec thread info file
-        run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k 123456 -in $line -out "${line::-4}"; rm -f ${line}; done
+        run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
+#       - name: dec thread info file
+#         run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
   step2:
     runs-on: ubuntu-latest
     steps:
