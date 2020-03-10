@@ -25,7 +25,7 @@ jobs:
         run: node bin/step1.js > /dev/null
         env:
           channel_id: ${{ matrix.channel_id }}
-      - name: name：enc thread info file
+      - name: enc thread info file
         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
       - name: test
         run: find checkpoint -type f | wc -l
