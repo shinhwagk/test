@@ -23,6 +23,8 @@ jobs:
         run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
       - name: step1
         run: node bin/step1.js > /dev/null
+        env:
+          channel_id: ${{ matrix.channel_id }}
       - name: name：enc thread info file
         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
 #       - name: dec thread info file
