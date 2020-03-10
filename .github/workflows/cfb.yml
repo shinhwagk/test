@@ -1,0 +1,16 @@
+name: crawlers
+on: push
+#  schedule:
+#    - cron: '*/2 * * * *'
+
+jobs:
+  step1:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        channel_id: [25, 143, 230]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'cfb'
+      - uses: actions/setup-node@v1
