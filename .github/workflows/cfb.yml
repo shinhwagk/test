@@ -21,7 +21,7 @@ jobs:
       - name: name：enc thread info file
         run: find test/ -type f -name '*.json' | while read line; do openssl enc -aes256 -k 123456 -in $line -out "${line}.enc"; rm -f ${line}; done
       - name: dec thread info file
-        run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -aes256 -k 123456 -in $line -out "${line::-4}"; rm -f ${line}; done
+        run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k 123456 -in $line -out "${line::-4}"; rm -f ${line}; done
   step2:
     runs-on: ubuntu-latest
     steps:
