@@ -10,6 +10,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230]
     steps:
+      - run: openssl version
       - uses: actions/checkout@v2
         with:
           path: bin
