@@ -31,6 +31,17 @@ jobs:
           echo $p
           node bin/step1.js $p > /dev/null
           find checkpoint -type f | wc -l
+          find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
+          git pull
+          git add -A checkpoint/${{ atrix.channel_id }}
+          git commit -m "c page ${p}"
+          for i in $(seq 1 5); do
+            git pull
+            git push
+            if [[ "$?" == "0" ]]; then
+              exit 0
+            fi
+          done   
         env:
           channel_id: ${{ matrix.channel_id }}
 #       - name: enc thread info file
