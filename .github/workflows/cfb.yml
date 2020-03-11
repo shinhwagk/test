@@ -31,6 +31,7 @@ jobs:
         run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
       - name: crawlar page
         run: |
+          mkdir -p checkpoint/${{ matrix.channel_id }}
           p=$(cat storage/${{ matrix.channel_id }}/page);
           echo $p
           node bin/step1.js $p > /dev/null
@@ -38,6 +39,7 @@ jobs:
           find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
           # mv checkpoint storage/
           rsync -a -v checkpoint/ storage/
+          echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
           cd storage
           git pull
           git add -A ${{ matrix.channel_id }}
@@ -53,6 +55,7 @@ jobs:
             sleep 5
             echo "retry ${i}."
           done
+          
         env:
           channel_id: ${{ matrix.channel_id }}
 #       - name: enc thread info file
