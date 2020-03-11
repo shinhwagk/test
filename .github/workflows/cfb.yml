@@ -48,7 +48,7 @@ jobs:
           git add -A ${{ matrix.channel_id }}
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -m -q "c page ${p}"
+          git commit -q -m "c page ${p}"
           for i in $(seq 1 5); do
             git pull
             git push
