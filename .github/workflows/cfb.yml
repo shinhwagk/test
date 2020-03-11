@@ -38,7 +38,7 @@ jobs:
           find checkpoint -type f | wc -l
           find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc" > /dev/null ; rm -f ${line}; done
           # mv checkpoint storage/
-          rsync -a -v checkpoint/ storage/
+          rsync -a checkpoint/ storage/
           echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
           cd storage
           git pull
