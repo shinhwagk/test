@@ -51,6 +51,7 @@ jobs:
               exit 0
             fi
             sleep 5
+            echo "retry ${i}."
           done
         env:
           channel_id: ${{ matrix.channel_id }}
