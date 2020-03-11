@@ -31,7 +31,7 @@ jobs:
         run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
       - name: crawlar page
         run: |
-          p=$(cat checkpoint/${{ matrix.channel_id }}/page);
+          p=$(cat storage/${{ matrix.channel_id }}/page);
           echo $p
           node bin/step1.js $p > /dev/null
           find checkpoint -type f | wc -l
@@ -40,7 +40,7 @@ jobs:
           rsync -a -v checkpoint/ storage/
           cd storage
           git pull
-          git add -A checkpoint/${{ matrix.channel_id }}
+          git add -A ${{ matrix.channel_id }}
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           git commit -m "c page ${p}"
