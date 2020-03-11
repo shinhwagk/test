@@ -30,6 +30,7 @@ jobs:
           p=$(cat checkpoint/${{ matrix.channel_id }}/page);
           echo $p
           node bin/step1.js $p > /dev/null
+          find checkpoint -type f | wc -l
         env:
           channel_id: ${{ matrix.channel_id }}
 #       - name: enc thread info file
