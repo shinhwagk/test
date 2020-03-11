@@ -23,7 +23,7 @@ jobs:
         run: bin/init.sh
       - name: crawlar page
         run: |
-          p=$(cat checkpoint/${{ matrix.channel_id }}/page)
+          p=$(cat checkpoint/${{ matrix.channel_id }}/page);
           echo $p
 #       - name: dec bin
 #         run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
