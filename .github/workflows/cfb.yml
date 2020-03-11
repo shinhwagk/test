@@ -10,7 +10,6 @@ jobs:
       matrix:
         channel_id: [25, 143, 230]
     steps:
-      - run: openssl version
       - uses: actions/checkout@v2
         with:
           path: bin
@@ -20,19 +19,25 @@ jobs:
       - run: npm i -g typescript ts-node
       - run: python -m pip install requests
       - run: npm i puppeteer fs-extra
-      - name: dec bin
-        run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
-      - name: step1
-        run: node bin/step1.js > /dev/null
-        env:
-          channel_id: ${{ matrix.channel_id }}
-      - name: enc thread info file
-        run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
-      - name: test
-        run: find checkpoint -type f | wc -l
-#       - name: dec thread info file
-#         run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
-  step2:
-    runs-on: ubuntu-latest
-    steps:
-      - run: openssl -h
+      - name: init folder and file
+        run: bin/init.sh
+      - name: crawlar page
+        run: |
+          p=$(cat checkpoint/${{ matrix.channel_id }}/page)
+          echo $p
+#       - name: dec bin
+#         run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
+#       - name: step1
+#         run: node bin/step1.js > /dev/null
+#         env:
+#           channel_id: ${{ matrix.channel_id }}
+#       - name: enc thread info file
+#         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
+#       - name: test
+#         run: find checkpoint -type f | wc -l
+# #       - name: dec thread info file
+# #         run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
+#   step2:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: openssl -h
