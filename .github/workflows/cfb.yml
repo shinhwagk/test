@@ -49,7 +49,8 @@ jobs:
             if [[ "$?" == "0" ]]; then
               exit 0
             fi
-          done   
+            sleep 5
+          done
         env:
           channel_id: ${{ matrix.channel_id }}
 #       - name: enc thread info file
