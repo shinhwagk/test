@@ -14,6 +14,10 @@ jobs:
         with:
           path: bin
           ref: 'cfb'
+      - uses: actions/checkout@v2
+        with:
+          path: storage
+          ref: 'cfb-storage'
       - uses: actions/setup-node@v1
       - uses: actions/setup-python@v1
       - name: Install Dependencies
@@ -32,6 +36,8 @@ jobs:
           node bin/step1.js $p > /dev/null
           find checkpoint -type f | wc -l
           find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
+          mv checkpoint storage/
+          cd storage
           git pull
           git add -A checkpoint/${{ matrix.channel_id }}
           git commit -m "c page ${p}"
