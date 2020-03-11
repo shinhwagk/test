@@ -27,7 +27,7 @@ jobs:
         run: |
           p=$(cat checkpoint/${{ matrix.channel_id }}/page);
           echo $p
-          node bin/step1.js $(cat checkpoint/${{ matrix.channel_id }}/page)  > /dev/null
+          node bin/step1.js $p  > /dev/null
         env:
           channel_id: ${{ matrix.channel_id }}
 #       - name: enc thread info file
