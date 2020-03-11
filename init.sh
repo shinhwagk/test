@@ -3,7 +3,7 @@
 CHANNEL_ID=$1
 
 
-CHANNEL_DIR="checkpoint/${CHANNEL_ID}"
+CHANNEL_DIR="storage/${CHANNEL_ID}"
 THREADS_DIR="${CHANNEL_DIR}/threads"
 PAGE_FILE="${CHANNEL_DIR}/page"
 
