@@ -20,7 +20,7 @@ jobs:
       - run: python -m pip install requests
       - run: npm i puppeteer fs-extra
       - name: init folder and file
-        run: chmod +x bin/init.sh; bin/init.sh
+        run: chmod +x bin/init.sh; bin/init.sh ${{ matrix.channel_id }}
       - name: crawlar page
         run: |
           p=$(cat checkpoint/${{ matrix.channel_id }}/page);
