@@ -21,14 +21,13 @@ jobs:
       - run: npm i puppeteer fs-extra
       - name: init folder and file
         run: chmod +x bin/init.sh; bin/init.sh ${{ matrix.channel_id }}
+      - name: dec bin
+        run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
       - name: crawlar page
         run: |
           p=$(cat checkpoint/${{ matrix.channel_id }}/page);
           echo $p
-      - name: dec bin
-        run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
-      - name: step1
-        run: node bin/step1.js $(cat checkpoint/${{ matrix.channel_id }}/page)  > /dev/null
+          node bin/step1.js $(cat checkpoint/${{ matrix.channel_id }}/page)  > /dev/null
         env:
           channel_id: ${{ matrix.channel_id }}
 #       - name: enc thread info file
