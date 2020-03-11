@@ -46,7 +46,7 @@ jobs:
           git branch -a
           git branch
           echo 11111111111
-          git pull
+          git pull -q
           echo 111111111112
           git add -A ${{ matrix.channel_id }}
           echo 111111111113
@@ -56,7 +56,7 @@ jobs:
           git commit -q -m "c page ${p}"
           echo 111111111115
           for i in $(seq 1 5); do
-            git pull
+            git pull -q
             git push
             if [[ "$?" == "0" ]]; then
               exit 0
