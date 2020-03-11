@@ -41,6 +41,9 @@ jobs:
           cp -r checkpoint/* storage/
           echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
           cd storage
+          git branch -a
+          git branch
+          echo 11111111111
           git pull
           git add -A ${{ matrix.channel_id }}
           git config --global user.name ${GITHUB_ACTOR}
