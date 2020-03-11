@@ -40,6 +40,8 @@ jobs:
           cd storage
           git pull
           git add -A checkpoint/${{ matrix.channel_id }}
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           git commit -m "c page ${p}"
           for i in $(seq 1 5); do
             git pull
