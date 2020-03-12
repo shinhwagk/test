@@ -58,7 +58,9 @@ jobs:
           echo 111111111115
           for i in $(seq 1 5); do
             git push
+            echo "push $?"
             git pull -q --rebase
+            echo "pull $?"
             if [[ "$?" == "0" ]]; then
               exit 0
             fi
