@@ -55,18 +55,24 @@ jobs:
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           echo 111111111114
           git commit -q -m "c page ${p}"
-          echo 111111111115
+          echo commit
+          echo "###################################"
           for i in $(seq 1 5); do
+            echo "push start ##########################"
             git push
+            echo "push end ##########################"
             echo "push $?"
             if [[ "$?" == "0" ]]; then
               exit 0
             fi
+            echo "pull start #####################################"
             git pull -q --rebase
+            echo "pull end #####################################"
             echo "pull $?"
             sleep 5
             echo "retry ${i}."
           done
+          echo "###################################"
           exit 1
           
         env:
