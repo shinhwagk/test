@@ -57,7 +57,7 @@ jobs:
         with:
           crypto-path: checkpoint
           crypto-action: enc
-          crypto-password: ${{secrets.cfb_password
+          crypto-password: ${{secrets.cfb_password}}
       - name: enc page
         uses: shinhwagk/actions-crypto@master
         with:
