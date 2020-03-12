@@ -53,7 +53,7 @@ jobs:
           echo "###################################"
           for i in $(seq 1 5); do
             echo "push start ##########################"
-            git push || git pull -q --rebase
+            git push || git pull -q --rebase || git rebase --continue
             echo "pull start #####################################"
             git pull -q --rebase
             echo "pull end #####################################"
