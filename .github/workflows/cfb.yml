@@ -30,7 +30,11 @@ jobs:
       - name: init folder and file
         run: chmod +x bin/init.sh; bin/init.sh ${{ matrix.channel_id }}
       - name: dec bin
-        run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
+        uses: shinhwagk/actions-crypto@0.0.7
+        with:
+          crypto-path: bin
+          crypto-action: dec
+          crypto-password: ${{secrets.cfb_password}}
       - name: crawlar page
         run: |
           mkdir -p checkpoint/${{ matrix.channel_id }}
