@@ -46,7 +46,7 @@ jobs:
           git branch -a
           git branch
           echo 11111111111
-          git pull -q --rebase
+          # git pull -q --rebase
           echo 111111111112
           git add -A ${{ matrix.channel_id }}
           echo 111111111113
