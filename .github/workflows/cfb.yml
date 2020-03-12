@@ -44,11 +44,6 @@ jobs:
           cp -r checkpoint/* storage/
           echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
           cd storage
-          git branch -a
-          git branch
-          echo "first pull ###############################"
-          # git pull -q --rebase
-          echo "first pull ###############################"
           git add -A ${{ matrix.channel_id }}
           echo 111111111113
           git config --global user.name ${GITHUB_ACTOR}
@@ -59,9 +54,8 @@ jobs:
           echo "###################################"
           for i in $(seq 1 5); do
             echo "push start ##########################"
+            git push || git pull -q --rebase
             git push
-            echo "push end ##########################"
-            echo "push $?"
             if [[ "$?" == "0" ]]; then
               exit 0
             fi
