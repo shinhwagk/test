@@ -33,7 +33,6 @@ jobs:
         run: find bin -type f -name '*.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
       - name: crawlar page
         run: |
-          set +e
           mkdir -p checkpoint/${{ matrix.channel_id }}
           p=$(cat storage/${{ matrix.channel_id }}/page);
           echo $p
