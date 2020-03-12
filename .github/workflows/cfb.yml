@@ -54,10 +54,6 @@ jobs:
           for i in $(seq 1 5); do
             echo "push start ##########################"
             git push || git pull -q --rebase
-            git push
-            if [[ "$?" == "0" ]]; then
-              exit 0
-            fi
             echo "pull start #####################################"
             git pull -q --rebase
             echo "pull end #####################################"
