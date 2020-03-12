@@ -53,11 +53,7 @@ jobs:
           echo "###################################"
           for i in $(seq 1 5); do
             echo "push start ##########################"
-            git push || git pull -q --rebase
-            echo "pull start #####################################"
-            git pull -q --rebase
-            echo "pull end #####################################"
-            echo "pull $?"
+            git push && exit 0 || git pull -q --rebase
             sleep 5
             echo "retry ${i}."
           done
