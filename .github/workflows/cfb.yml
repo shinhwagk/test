@@ -55,6 +55,7 @@ jobs:
             node bin/step1.js ${{ steps.setpage.outputs.page }} > /dev/null
             [ "$?" == "0" ] && c=$i || break;
           done
+          echo $c;
           p=${{ steps.setpage.outputs.page }}
           echo $(($p+$c)) > storage/${{ matrix.channel_id }}/page
         env:
