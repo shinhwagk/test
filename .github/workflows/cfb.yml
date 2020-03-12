@@ -66,20 +66,20 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push
         run: |
-         cp -r checkpoint/* storage/
-         cd storage
-         git add -A ${{ matrix.channel_id }}
-         git config --global user.name ${GITHUB_ACTOR}
-         git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-         git commit -q -m "c page ${{ steps.setpage.outputs.page }}"
-         for i in $(seq 1 5); do
-           echo "push start ##########################"
-           git push && exit 0 || git pull -q --rebase
-           sleep 5
-           echo "retry ${i}."
-         done
-         echo "###################################"
-         exit 1
+          cp -r checkpoint/* storage/
+          cd storage
+          git add -A ${{ matrix.channel_id }}
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          git commit -q -m "c page ${{ steps.setpage.outputs.page }}"
+          for i in $(seq 1 5); do
+            echo "push start ##########################"
+            git push && exit 0 || git pull -q --rebase
+            sleep 5
+            echo "retry ${i}."
+          done
+          echo "###################################"
+          exit 1
 #       - name: enc thread info file
 #         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
 #       - name: test
