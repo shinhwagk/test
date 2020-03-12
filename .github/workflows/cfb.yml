@@ -59,14 +59,15 @@ jobs:
           for i in $(seq 1 5); do
             git push
             echo "push $?"
-            git pull -q --rebase
-            echo "pull $?"
             if [[ "$?" == "0" ]]; then
               exit 0
             fi
+            git pull -q --rebase
+            echo "pull $?"
             sleep 5
             echo "retry ${i}."
           done
+          exit 1
           
         env:
           channel_id: ${{ matrix.channel_id }}
