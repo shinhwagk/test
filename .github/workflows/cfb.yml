@@ -53,6 +53,7 @@ jobs:
           echo 111111111113
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          git config --bool core.bare true
           echo 111111111114
           git commit -q -m "c page ${p}"
           echo commit
