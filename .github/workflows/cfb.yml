@@ -56,8 +56,8 @@ jobs:
           git commit -q -m "c page ${p}"
           echo 111111111115
           for i in $(seq 1 5); do
-            git pull -q --rebase
             git push
+            git pull -q --rebase
             if [[ "$?" == "0" ]]; then
               exit 0
             fi
