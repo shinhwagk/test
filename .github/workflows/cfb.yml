@@ -49,7 +49,9 @@ jobs:
       - name: crawlar page
         run: |
           mkdir -p checkpoint/${{ matrix.channel_id }}
-          node bin/step1.js ${{ steps.setpage.outputs.page  }} > /dev/null
+          node bin/step1.js ${{ steps.setpage.outputs.page }} > /dev/null
+          p=${{ steps.setpage.outputs.page }}
+          echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
