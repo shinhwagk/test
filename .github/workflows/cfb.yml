@@ -46,14 +46,13 @@ jobs:
           cd storage
           git branch -a
           git branch
-          echo 11111111111
+          echo "first pull ###############################"
           # git pull -q --rebase
-          echo 111111111112
+          echo "first pull ###############################"
           git add -A ${{ matrix.channel_id }}
           echo 111111111113
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git config --bool core.bare true
           echo 111111111114
           git commit -q -m "c page ${p}"
           echo commit
