@@ -48,10 +48,15 @@ jobs:
           echo ::set-output name=page::$page
       - name: crawlar page
         run: |
+          set +e
           mkdir -p checkpoint/${{ matrix.channel_id }}
-          node bin/step1.js ${{ steps.setpage.outputs.page }} > /dev/null
+          c=0
+          for i in `seq 1 5`; do
+            node bin/step1.js ${{ steps.setpage.outputs.page }} > /dev/null
+            [ "$?" == "0" ] && c=$i || break;
+          done
           p=${{ steps.setpage.outputs.page }}
-          echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
+          echo $(($p+$c)) > storage/${{ matrix.channel_id }}/page
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
