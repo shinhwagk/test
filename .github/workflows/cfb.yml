@@ -38,7 +38,7 @@ jobs:
       - name: dec page
         uses: shinhwagk/actions-crypto@master
         with:
-         crypto-path: storage/${{ matrix.channel_id }}/page
+         crypto-path: storage/${{ matrix.channel_id }}/page.enc
          crypto-action: dec
          crypto-password: ${{secrets.cfb_password}}
       - name: set page var
