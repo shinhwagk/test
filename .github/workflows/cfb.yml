@@ -35,37 +35,68 @@ jobs:
           crypto-path: bin
           crypto-action: dec
           crypto-password: ${{secrets.cfb_password}}
+      - name: dec page
+        uses: shinhwagk/actions-crypto@master
+        with:
+         crypto-path: storage/${{ matrix.channel_id }}/page
+         crypto-action: dec
+         crypto-password: ${{secrets.cfb_password}}
+      - name: set page var
+        id: setpage
+        run: |
+          page=$(cat storage/${{ matrix.channel_id }}/page)
+          echo ::set-output name=page::$page
       - name: crawlar page
         run: |
           mkdir -p checkpoint/${{ matrix.channel_id }}
-          p=$(cat storage/${{ matrix.channel_id }}/page);
-          echo $p
-          node bin/step1.js $p > /dev/null
-          find checkpoint -type f | wc -l
-          find checkpoint/ -type f | while read line; do openssl enc -a -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc" > /dev/null ; rm -f ${line}; done
-          # mv checkpoint storage/
-          cp -r checkpoint/* storage/
+          node bin/step1.js ${{ steps.setpage.outputs.page  }} > /dev/null
           echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
-          cd storage
-          git add -A ${{ matrix.channel_id }}
-          echo 111111111113
-          git config --global user.name ${GITHUB_ACTOR}
-          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          echo 111111111114
-          git commit -q -m "c page ${p}"
-          echo commit
-          echo "###################################"
-          for i in $(seq 1 5); do
-            echo "push start ##########################"
-            git push && exit 0 || git pull -q --rebase
-            sleep 5
-            echo "retry ${i}."
-          done
-          echo "###################################"
-          exit 1
-          
+
+          #echo 111111111113
+          #git config --global user.name ${GITHUB_ACTOR}
+          #git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          #echo 111111111114
+          #git commit -q -m "c page ${p}"
+          #echo commit
+          #echo "###################################"
+          #for i in $(seq 1 5); do
+          #  echo "push start ##########################"
+          #  git push && exit 0 || git pull -q --rebase
+          #  sleep 5
+          #  echo "retry ${i}."
+          #done
+          #echo "###################################"
+          #exit 1
         env:
           channel_id: ${{ matrix.channel_id }}
+      - name: enc checkpoint
+        uses: shinhwagk/actions-crypto@master
+        with:
+          crypto-path: checkpoint
+          crypto-action: enc
+          crypto-password: ${{secrets.cfb_password
+      - name: enc page
+        uses: shinhwagk/actions-crypto@master
+        with:
+          crypto-path: storage/${{ matrix.channel_id }}/page
+          crypto-action: enc
+          crypto-password: ${{secrets.cfb_password}}
+      - name: push
+        run: |
+         cp -r checkpoint/* storage/
+         cd storage
+         git add -A ${{ matrix.channel_id }}
+         git config --global user.name ${GITHUB_ACTOR}
+         git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+         git commit -q -m "c page ${{ steps.setpage.outputs.page }}"
+         for i in $(seq 1 5); do
+           echo "push start ##########################"
+           git push && exit 0 || git pull -q --rebase
+           sleep 5
+           echo "retry ${i}."
+         done
+         echo "###################################"
+         exit 1
 #       - name: enc thread info file
 #         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
 #       - name: test
