@@ -50,23 +50,6 @@ jobs:
         run: |
           mkdir -p checkpoint/${{ matrix.channel_id }}
           node bin/step1.js ${{ steps.setpage.outputs.page  }} > /dev/null
-          echo $(($p+1)) > storage/${{ matrix.channel_id }}/page
-
-          #echo 111111111113
-          #git config --global user.name ${GITHUB_ACTOR}
-          #git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          #echo 111111111114
-          #git commit -q -m "c page ${p}"
-          #echo commit
-          #echo "###################################"
-          #for i in $(seq 1 5); do
-          #  echo "push start ##########################"
-          #  git push && exit 0 || git pull -q --rebase
-          #  sleep 5
-          #  echo "retry ${i}."
-          #done
-          #echo "###################################"
-          #exit 1
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
