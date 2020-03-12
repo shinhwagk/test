@@ -30,7 +30,7 @@ jobs:
       - name: init folder and file
         run: chmod +x bin/init.sh; bin/init.sh ${{ matrix.channel_id }}
       - name: dec bin
-        uses: shinhwagk/actions-crypto@0.0.7
+        uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: bin
           crypto-action: dec
