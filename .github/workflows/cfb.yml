@@ -52,7 +52,8 @@ jobs:
           mkdir -p checkpoint/${{ matrix.channel_id }}
           c=0
           for i in `seq 1 5`; do
-            local pn=${{ steps.setpage.outputs.page }}
+            pn=${{ steps.setpage.outputs.page }}
+            echo $pn
             node bin/step1.js $pn > /dev/null
             [ "$?" == "0" ] && c=$i || break;
             pn=$(($pn+1))
