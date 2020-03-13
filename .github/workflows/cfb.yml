@@ -140,7 +140,7 @@ jobs:
           cp -r checkpoint/* storage/
           cd storage
           git status
-          git add -A ${{ matrix.channel_id }}_success
+          git add -A
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
