@@ -121,7 +121,7 @@ jobs:
           mkdir -p checkpoint/${{ matrix.channel_id }}_success
           ls storage/${{matrix.channel_id}} | head -5 | while read tid; do
             node bin/step2.js $tid
-            ls -l checkpoint
+            ls -l checkpoint/${{ matrix.channel_id }}_success
           done
         env:
           channel_id: ${{ matrix.channel_id }}
