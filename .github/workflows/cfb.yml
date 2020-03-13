@@ -125,6 +125,12 @@ jobs:
           done
         env:
           channel_id: ${{ matrix.channel_id }}
+      - name: enc checkpoint
+        uses: shinhwagk/actions-crypto@master
+        with:
+          crypto-path: checkpoint
+          crypto-action: enc
+          crypto-password: ${{secrets.cfb_password}}
       - name: push
         run: |
           cp -r checkpoint/* storage/
