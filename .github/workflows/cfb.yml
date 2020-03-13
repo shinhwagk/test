@@ -21,11 +21,11 @@ jobs:
           path: storage
           ref: 'cfb-storage'
       - uses: actions/setup-node@v1
-      - uses: actions/setup-python@v1
+      # - uses: actions/setup-python@v1
       - name: Install Dependencies
         run: |
           npm i -g typescript ts-node
-          python -m pip install requests
+          # python -m pip install requests
           npm i puppeteer fs-extra
       - name: init folder and file
         run: chmod +x bin/init.sh; bin/init.sh ${{ matrix.channel_id }}
@@ -91,7 +91,56 @@ jobs:
           done
           echo "###################################"
           exit 1
-  # step2:
+  step2:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        channel_id: [25, 143, 230]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: bin
+          ref: 'cfb'
+      - uses: actions/checkout@v2
+        with:
+          path: storage
+          ref: 'cfb-storage'
+      - uses: actions/setup-node@v1
+      - name: Install Dependencies
+        run: |
+          npm i -g typescript ts-node
+          npm i puppeteer fs-extra got
+      - name: dec bin
+        uses: shinhwagk/actions-crypto@master
+        with:
+          crypto-path: bin
+          crypto-action: dec
+          crypto-password: ${{secrets.cfb_password}}
+      - name: crawlar thread
+        run: |
+          mkdir -p checkpoint/${{ matrix.channel_id }}_success
+          ls storage/${{matrix.channel_id}} | head -5 | while read tid; do
+            node bin/step2.js $tid
+          done
+        env:
+          channel_id: ${{ matrix.channel_id }}
+      - name: push
+        run: |
+          cp -r checkpoint/* storage/
+          cd storage
+          git add -A ${{ matrix.channel_id }}_success
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
+          for i in $(seq 1 5); do
+            echo "push start ##########################"
+            git push && exit 0 || git pull -q --rebase
+            sleep 5
+            echo "retry ${i}."
+          done
+          echo "###################################"
+          exit 1
+  # step3:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
