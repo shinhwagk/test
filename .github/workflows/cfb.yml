@@ -120,6 +120,7 @@ jobs:
         run: |
           mkdir -p checkpoint/${{ matrix.channel_id }}_success
           ls storage/${{matrix.channel_id}}/threads 2>/dev/null | head -10 | while read tid; do
+            mkdir -p checkpoint/${{ matrix.channel_id }}_success/${tid}
             node bin/step2.js $tid && mv storage/${{matrix.channel_id}}/threads/${tid}/meta.json.enc checkpoint/${{ matrix.channel_id }}_success/${tid}/ && rm -fr storage/${{matrix.channel_id}}/threads/${tid}
             ls -l checkpoint/${{ matrix.channel_id }}_success
           done
