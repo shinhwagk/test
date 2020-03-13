@@ -119,7 +119,7 @@ jobs:
       - name: crawlar thread
         run: |
           mkdir -p checkpoint/${{ matrix.channel_id }}_success
-          ls storage/${{matrix.channel_id}}/threads | head -5 | while read tid; do
+          ls storage/${{matrix.channel_id}}/threads 2>/dev/null | head -5 | while read tid; do
             node bin/step2.js $tid
             ls -l checkpoint/${{ matrix.channel_id }}_success
           done
