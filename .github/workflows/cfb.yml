@@ -79,7 +79,7 @@ jobs:
           git add -A ${{ matrix.channel_id }}
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -q -m "c page ${{ steps.setpage.outputs.page }}"
+          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
           for i in $(seq 1 5); do
             echo "push start ##########################"
             git push && exit 0 || git pull -q --rebase
