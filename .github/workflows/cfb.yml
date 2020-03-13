@@ -91,13 +91,33 @@ jobs:
           done
           echo "###################################"
           exit 1
-#       - name: enc thread info file
-#         run: find checkpoint/ -type f | while read line; do openssl enc -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line}.enc"; rm -f ${line}; done
-#       - name: test
-#         run: find checkpoint -type f | wc -l
-# #       - name: dec thread info file
-# #         run: find test/ -type f -name '*.json.enc' | while read line; do openssl enc -d -aes256 -k ${{secrets.cfb_password}} -in $line -out "${line::-4}"; rm -f ${line}; done
-#   step2:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: openssl -h
+  # step2:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       channel_id: [25, 143, 230]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         path: bin
+  #         ref: 'cfb'
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         path: storage
+  #         ref: 'cfb-storage'
+  #     - uses: actions/setup-python@v1
+  #     - run: pip install requests
+  #     - name: dec bin
+  #       uses: shinhwagk/actions-crypto@master
+  #       with:
+  #         crypto-path: bin
+  #         crypto-action: dec
+  #         crypto-password: ${{secrets.cfb_password}}
+  #     - name: push drive
+  #       run: |
+  #         cd storage;
+  #         ls | head -5 | while read line; do
+  #           find $line -type f | while read f; do
+  #             echo "${{ matrix.channel_id }} $line $f" | drive_push.py
+  #           done
+  #         done
