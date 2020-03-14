@@ -1,9 +1,9 @@
 name: crawlers
 on:
- push:
-  branches: master
- schedule:
-   - cron: '*/2 * * * *'
+  push:
+    branches: master
+  schedule:
+    - cron: "*/2 * * * *"
 
 jobs:
   step1:
@@ -15,24 +15,24 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: bin
-          ref: 'refs/heads/cfb'
+          ref: "refs/heads/cfb"
       - uses: actions/checkout@v2
         with:
           path: storage
-          ref: 'cfb-storage'
+          ref: "cfb-storage"
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: npm i puppeteer fs-extra
       - name: init folder and file and page
         id: init
         run: |
-         channel_dir=checkpoint/${{ matrix.channel_id }}
-         mkdir -p ${channel_dir}/threads
-         storage_page_file=storage/${{ matrix.channel_id }}/page
-         [ -e $storage_page_file ] || echo 1 > $storage_page_file # init page file if not exist
-         page=$(cat $storage_page_file)
-         echo ::set-output name=page::$page
-         echo ::set-output name=channel_dir::$channel_dir
+          channel_dir=checkpoint/${{ matrix.channel_id }}
+          mkdir -p ${channel_dir}/threads
+          storage_page_file=storage/${{ matrix.channel_id }}/page
+          [ -e $storage_page_file ] || echo 1 > $storage_page_file # init page file if not exist
+          page=$(cat $storage_page_file)
+          echo ::set-output name=page::$page
+          echo ::set-output name=channel_dir::$channel_dir
       - name: dec bin
         uses: shinhwagk/actions-crypto@master
         with:
@@ -86,11 +86,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: bin
-          ref: 'refs/heads/cfb'
+          ref: "refs/heads/cfb"
       - uses: actions/checkout@v2
         with:
           path: storage
-          ref: 'cfb-storage'
+          ref: "cfb-storage"
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: |
@@ -144,11 +144,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: bin
-          ref: 'refs/heads/cfb'
+          ref: "refs/heads/cfb"
       - uses: actions/checkout@v2
         with:
           path: storage
-          ref: 'cfb-storage'
+          ref: "cfb-storage"
       - uses: actions/setup-python@v1
       - run: pip install requests
       - name: dec bin
@@ -159,12 +159,12 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: space
         run: |
-         mkdir tempspace
-         ls storage/${{matrix.channel_id}}_success | head -10 | while read tid; do
-           cp -r storage/${{matrix.channel_id}}_success/$tid tempspace/
-         done
-         find tempspace -type f -name *json* -delete
-         ls tempspace
+          mkdir tempspace
+          ls storage/${{matrix.channel_id}}_success | head -10 | while read tid; do
+            cp -r storage/${{matrix.channel_id}}_success/$tid tempspace/
+          done
+          find tempspace -type f -name *json* -delete
+          ls tempspace
       - name: dec tempspace
         uses: shinhwagk/actions-crypto@master
         with:
