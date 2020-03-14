@@ -52,6 +52,7 @@ jobs:
           set +e
           mkdir ${tempspace};
           ls ${tempspace};
+          echo ${tempspace}1111111;
           pn=${{ steps.init.outputs.page }}
           thread_number=0
           for i in `seq 1 ${page_number}`; do
