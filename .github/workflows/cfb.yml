@@ -151,6 +151,7 @@ jobs:
           exit 1
   step3:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
