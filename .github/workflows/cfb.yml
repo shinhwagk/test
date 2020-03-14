@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         channel_id: [25, 143, 230]
+        page_number: [10]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -45,7 +46,7 @@ jobs:
           mkdir tmpspace;
           pn=${{ steps.init.outputs.page }}
           thread_number=0
-          for i in `seq 1 5`; do
+          for i in `seq 1 ${{ matrix.page_number }}`; do
             echo $pn
             node bin/step1.js $pn tmpspace > /dev/null
             total_thread_number=`ls tmpspace | wc -l` && echo $total_thread_number $thread_number
