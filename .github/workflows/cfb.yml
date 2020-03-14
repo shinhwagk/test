@@ -39,7 +39,8 @@ jobs:
         run: |
           mkdir -p ${storage_channel_path}
           [ -e ${storage_channel_page} ] || echo 1 > ${storage_channel_page} # init page file if not exist
-          page=$(cat $storage_page_file)
+          page=$(cat $storage_channel_page)
+          echo $page
           echo ::set-output name=page::$page
       - name: dec bin
         uses: shinhwagk/actions-crypto@master
@@ -51,8 +52,6 @@ jobs:
         run: |
           set +e
           mkdir ${tempspace};
-          ls ${tempspace};
-          echo ${tempspace}1111111;
           pn=${{ steps.init.outputs.page }}
           thread_number=0
           for i in `seq 1 ${page_number}`; do
