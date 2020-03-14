@@ -14,15 +14,10 @@ jobs:
         channel_id: [25, 143, 230]
     env:
       page_number: 10
-      tempspace: tempspace
+      temp_threads: tempspace/threads
       storage_channel_path: storage/${{ matrix.channel_id }}
       storage_channel_page: storage/${{ matrix.channel_id }}/page
     steps:
-      - run: |
-          echo $page_number
-          echo $storage_channel_path
-          echo $storage_channel_page
-          echo $tempspace
       - uses: actions/checkout@v2
         with:
           path: bin
@@ -37,7 +32,7 @@ jobs:
       - name: init folder and file and page
         id: init
         run: |
-          mkdir -p ${storage_channel_path}
+          mkdir -p ${storage_channel_path} ${temp_threads}
           [ -e ${storage_channel_page} ] || echo 1 > ${storage_channel_page} # init page file if not exist
           page=$(cat $storage_channel_page)
           echo ::set-output name=page::$page
@@ -50,13 +45,15 @@ jobs:
       - name: crawlar page
         run: |
           set +e
-          mkdir ${tempspace};
           pn=${{ steps.init.outputs.page }}
           thread_number=0
           for i in `seq 1 ${page_number}`; do
             echo $pn
-            node bin/step1.js $pn ${tempspace} > /dev/null
-            total_thread_number=`ls ${tempspace} | wc -l` && echo $total_thread_number $thread_number
+            node bin/step1.js $pn ${temp_threads}
+            if [ $? != 0 ]; then
+              break;
+            fi
+            total_thread_number=`ls ${temp_threads} | wc -l` && echo $total_thread_number $thread_number
             [ $total_thread_number -gt $thread_number ] || break;
             let thread_number=total_thread_number
             pn=$(($pn+1));
@@ -71,14 +68,17 @@ jobs:
           crypto-path: ${{ env.tempspace }}
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
-      - name: push
+      - name: Config Github name & email
         run: |
-          cp -r ${tempspace}/* ${storage_channel_path}/
-          cd storage
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git add -A && [ `git status -s | wc -l` != 0 ] && \
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.init.outputs.page }}" && \
+      - name: push
+        run: |
+          cp -r ${temp_threads}/* ${storage_channel_path}/
+          cd storage
+          git add -A
+          [ `git status -s | wc -l` != 0 ] && \
+          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.init.outputs.page }}"
           for i in $(seq 1 5); do
             echo "push start ##########################"
             git push && exit 0 || git pull -q --rebase
