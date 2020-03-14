@@ -42,17 +42,15 @@ jobs:
       - name: crawlar page
         run: |
           set +e
-          c=0
           pn=${{ steps.init.outputs.page }}
           for i in `seq 1 5`; do
             echo $pn
             node bin/step1.js $pn > /dev/null
-            [ "$?" == "0" ] && c=$i || break;
+            [ "$?" == "0" ] || break;
             pn=$(($pn+1));
           done
-          echo $c;
-          # p=${{ steps.init.outputs.page }}
           echo $pn > storage/${{ matrix.channel_id }}/page
+          echo "crawlar page: $pn"
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
@@ -65,10 +63,11 @@ jobs:
         run: |
           cp -r checkpoint/* storage/
           cd storage
-          git add -A
+
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.init.outputs.page }}"
+          git add -A && [ `git status -s | wc -l` != 0 ] && \
+          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.init.outputs.page }}" && \
           for i in $(seq 1 5); do
             echo "push start ##########################"
             git push && exit 0 || git pull -q --rebase
