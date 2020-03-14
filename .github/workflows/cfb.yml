@@ -118,7 +118,8 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: crawlar thread
         run: |
-          ls storage/${{matrix.channel_id}}/threads 2>/dev/null | head -10 | while read tid; do
+          mkdir -p storage/${{matrix.channel_id}}/threads;
+          ls storage/${{matrix.channel_id}}/threads | head -10 | while read tid; do
             cp_t_path=checkpoint/${{ matrix.channel_id }}_success/${tid}
             mkdir -p $cp_t_path
             node bin/step2.js $tid $cp_t_path && \
@@ -137,20 +138,16 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push
         run: |
-          cp -r checkpoint/* storage/
-          cd storage
-          git status
+          cp -r checkpoint/* storage/ && cd storage
           git add -A
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
           for i in $(seq 1 5); do
-            echo "push start ##########################"
             git push && exit 0 || git pull -q --rebase
             sleep 5
             echo "retry ${i}."
           done
-          echo "###################################"
           exit 1
   # step3:
   #   runs-on: ubuntu-latest
