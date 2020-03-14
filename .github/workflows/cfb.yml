@@ -144,7 +144,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: bin
-          ref: 'cfb'
+          ref: 'REFS/HEADS/cfb'
       - uses: actions/checkout@v2
         with:
           path: storage
