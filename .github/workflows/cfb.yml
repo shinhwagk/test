@@ -49,7 +49,7 @@ jobs:
             echo $pn
             node bin/step1.js $pn tmpspace > /dev/null
             total_thread_number=`ls tmpspace | wc -l`
-            [ $total_thread_number -le $thread_number ] && break;
+            [ $total_thread_number -gt $thread_number ] || break;
             let thread_number+=total_thread_number
             pn=$(($pn+1));
           done
