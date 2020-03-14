@@ -20,6 +20,8 @@ jobs:
       storage_channel_path: storage/${{ matrix.channel_id }}
       storage_channel_page: storage/${{ matrix.channel_id }}/page
     steps:
+      - run: |
+          curl http://67.220.92.8/forum/forumdisplay.php?fid=230&filter=0&orderby=dateline&ascdesc=ASC&page=707
       - uses: actions/checkout@v2
         with:
           path: bin
@@ -90,125 +92,125 @@ jobs:
           done
           echo "###################################"
           exit 1
-  step2:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        channel_id: [25, 143, 230]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: bin
-          ref: "refs/heads/cfb"
-      - uses: actions/checkout@v2
-        with:
-          path: storage
-          ref: "cfb-storage"
-      - uses: actions/setup-node@v1
-      - name: Install Dependencies
-        run: |
-          npm i -g typescript ts-node
-          npm i puppeteer fs-extra got
-      - name: dec bin
-        uses: shinhwagk/actions-crypto@master
-        with:
-          crypto-path: bin
-          crypto-action: dec
-          crypto-password: ${{secrets.cfb_password}}
-      - name: crawlar thread
-        run: |
-          mkdir -p storage/${{matrix.channel_id}}/threads;
-          ls storage/${{matrix.channel_id}}/threads | head -10 | while read tid; do
-            cp_t_path=checkpoint/${{ matrix.channel_id }}_success/${tid}
-            mkdir -p $cp_t_path
-            node bin/step2.js $tid $cp_t_path && \
-            mv storage/${{matrix.channel_id}}/threads/${tid}/meta.json.enc ${cp_t_path}/ && \
-            ls -l $cp_t_path && \
-            rm -fr storage/${{matrix.channel_id}}/threads/${tid}
-            ls -l checkpoint/${{ matrix.channel_id }}_success
-          done
-        env:
-          channel_id: ${{ matrix.channel_id }}
-      - name: enc checkpoint
-        uses: shinhwagk/actions-crypto@master
-        with:
-          crypto-path: checkpoint
-          crypto-action: enc
-          crypto-password: ${{secrets.cfb_password}}
-      - name: push
-        run: |
-          cp -r checkpoint/* storage/ && cd storage
-          git add -A
-          git config --global user.name ${GITHUB_ACTOR}
-          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
-          for i in $(seq 1 5); do
-            git push && exit 0 || git pull -q --rebase
-            sleep 5
-            echo "retry ${i}."
-          done
-          exit 1
-  step3:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    strategy:
-      fail-fast: false
-      matrix:
-        channel_id: [25, 143, 230]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: bin
-          ref: "refs/heads/cfb"
-      - uses: actions/checkout@v2
-        with:
-          path: storage
-          ref: "cfb-storage"
-      - uses: actions/setup-python@v1
-      - run: pip install requests
-      - name: dec bin
-        uses: shinhwagk/actions-crypto@master
-        with:
-          crypto-path: bin
-          crypto-action: dec
-          crypto-password: ${{secrets.cfb_password}}
-      - name: space
-        run: |
-          mkdir tempspace
-          ls storage/${{matrix.channel_id}}_success | head -50 | while read tid; do
-            cp -r storage/${{matrix.channel_id}}_success/$tid tempspace/
-          done
-          find tempspace -type f -name *json* -delete
-          ls tempspace
-      - name: dec tempspace
-        uses: shinhwagk/actions-crypto@master
-        with:
-          crypto-path: tempspace
-          crypto-action: dec
-          crypto-password: ${{secrets.cfb_password}}
-      - name: push drive
-        run: |
-          ls tempspace | while read tid; do
-            find tempspace/${tid} -type f | while read file; do
-              startT=`date +%s`
-              python bin/push.py ${{matrix.channel_id}} $tid ${file}
-              endT=`date +%s`
-              echo $(($endT-$startT))
-            done
-            rm -fr storage/${{matrix.channel_id}}_success/$tid
-            echo "thread id: $tid ."
-          done
-      - name: push
-        run: |
-          cd storage
-          git add -A
-          git config --global user.name ${GITHUB_ACTOR}
-          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
-          for i in $(seq 1 5); do
-            git push && exit 0 || git pull -q --rebase
-            sleep 5
-            echo "retry ${i}."
-          done
-          exit 1
+#   step2:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         channel_id: [25, 143, 230]
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           path: bin
+#           ref: "refs/heads/cfb"
+#       - uses: actions/checkout@v2
+#         with:
+#           path: storage
+#           ref: "cfb-storage"
+#       - uses: actions/setup-node@v1
+#       - name: Install Dependencies
+#         run: |
+#           npm i -g typescript ts-node
+#           npm i puppeteer fs-extra got
+#       - name: dec bin
+#         uses: shinhwagk/actions-crypto@master
+#         with:
+#           crypto-path: bin
+#           crypto-action: dec
+#           crypto-password: ${{secrets.cfb_password}}
+#       - name: crawlar thread
+#         run: |
+#           mkdir -p storage/${{matrix.channel_id}}/threads;
+#           ls storage/${{matrix.channel_id}}/threads | head -10 | while read tid; do
+#             cp_t_path=checkpoint/${{ matrix.channel_id }}_success/${tid}
+#             mkdir -p $cp_t_path
+#             node bin/step2.js $tid $cp_t_path && \
+#             mv storage/${{matrix.channel_id}}/threads/${tid}/meta.json.enc ${cp_t_path}/ && \
+#             ls -l $cp_t_path && \
+#             rm -fr storage/${{matrix.channel_id}}/threads/${tid}
+#             ls -l checkpoint/${{ matrix.channel_id }}_success
+#           done
+#         env:
+#           channel_id: ${{ matrix.channel_id }}
+#       - name: enc checkpoint
+#         uses: shinhwagk/actions-crypto@master
+#         with:
+#           crypto-path: checkpoint
+#           crypto-action: enc
+#           crypto-password: ${{secrets.cfb_password}}
+#       - name: push
+#         run: |
+#           cp -r checkpoint/* storage/ && cd storage
+#           git add -A
+#           git config --global user.name ${GITHUB_ACTOR}
+#           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+#           git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
+#           for i in $(seq 1 5); do
+#             git push && exit 0 || git pull -q --rebase
+#             sleep 5
+#             echo "retry ${i}."
+#           done
+#           exit 1
+#   step3:
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 5
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         channel_id: [25, 143, 230]
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           path: bin
+#           ref: "refs/heads/cfb"
+#       - uses: actions/checkout@v2
+#         with:
+#           path: storage
+#           ref: "cfb-storage"
+#       - uses: actions/setup-python@v1
+#       - run: pip install requests
+#       - name: dec bin
+#         uses: shinhwagk/actions-crypto@master
+#         with:
+#           crypto-path: bin
+#           crypto-action: dec
+#           crypto-password: ${{secrets.cfb_password}}
+#       - name: space
+#         run: |
+#           mkdir tempspace
+#           ls storage/${{matrix.channel_id}}_success | head -50 | while read tid; do
+#             cp -r storage/${{matrix.channel_id}}_success/$tid tempspace/
+#           done
+#           find tempspace -type f -name *json* -delete
+#           ls tempspace
+#       - name: dec tempspace
+#         uses: shinhwagk/actions-crypto@master
+#         with:
+#           crypto-path: tempspace
+#           crypto-action: dec
+#           crypto-password: ${{secrets.cfb_password}}
+#       - name: push drive
+#         run: |
+#           ls tempspace | while read tid; do
+#             find tempspace/${tid} -type f | while read file; do
+#               startT=`date +%s`
+#               python bin/push.py ${{matrix.channel_id}} $tid ${file}
+#               endT=`date +%s`
+#               echo $(($endT-$startT))
+#             done
+#             rm -fr storage/${{matrix.channel_id}}_success/$tid
+#             echo "thread id: $tid ."
+#           done
+#       - name: push
+#         run: |
+#           cd storage
+#           git add -A
+#           git config --global user.name ${GITHUB_ACTOR}
+#           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+#           git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
+#           for i in $(seq 1 5); do
+#             git push && exit 0 || git pull -q --rebase
+#             sleep 5
+#             echo "retry ${i}."
+#           done
+#           exit 1
