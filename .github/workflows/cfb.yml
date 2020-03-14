@@ -22,6 +22,7 @@ jobs:
           echo $page_number
           echo $storage_channel_path
           echo $storage_channel_page
+          echo $tempspace
       - uses: actions/checkout@v2
         with:
           path: bin
