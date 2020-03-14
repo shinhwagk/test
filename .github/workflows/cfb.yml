@@ -20,8 +20,6 @@ jobs:
       storage_channel_path: storage/${{ matrix.channel_id }}
       storage_channel_page: storage/${{ matrix.channel_id }}/page
     steps:
-      - run: |
-          curl http://67.220.92.8/forum/forumdisplay.php?fid=230&filter=0&orderby=dateline&ascdesc=ASC&page=707
       - uses: actions/checkout@v2
         with:
           path: bin
