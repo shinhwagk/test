@@ -163,6 +163,7 @@ jobs:
          ls storage/${{matrix.channel_id}}_success | head -10 | while read tid; do
            cp -r storage/${{matrix.channel_id}}_success/$tid tempspace/
          done
+         find tempspace -type f -name *json* -delete
          ls tempspace
       - name: dec tempspace
         uses: shinhwagk/actions-crypto@master
