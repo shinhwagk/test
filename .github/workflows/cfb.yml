@@ -172,7 +172,7 @@ jobs:
       - name: space
         run: |
           mkdir tempspace
-          ls storage/${{matrix.channel_id}}_success | head -10 | while read tid; do
+          ls storage/${{matrix.channel_id}}_success | head -50 | while read tid; do
             cp -r storage/${{matrix.channel_id}}_success/$tid tempspace/
           done
           find tempspace -type f -name *json* -delete
