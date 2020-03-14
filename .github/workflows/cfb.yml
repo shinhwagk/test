@@ -50,8 +50,9 @@ jobs:
           thread_number=0
           for i in `seq 1 ${page_number}`; do
             echo $pn
-            node bin/step1.js $pn ${temp_threads}
+            err=`node bin/step1.js $pn ${temp_threads} 2>&1`
             if [ $? != 0 ]; then
+              echo $err
               break;
             fi
             total_thread_number=`ls ${temp_threads} | wc -l` && echo $total_thread_number $thread_number
