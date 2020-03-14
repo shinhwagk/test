@@ -175,6 +175,7 @@ jobs:
         run: |
           ls tempspace | while read tid; do
             find tempspace/${tid} -type f | while read f; do
+              ls tempspace/${tid}
               python bin/push.py ${{matrix.channel_id}} $tid tempspace/${tid}/${f}
             done
             rm -fr storage/${{matrix.channel_id}}_success/$tid
