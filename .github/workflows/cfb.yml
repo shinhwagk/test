@@ -16,7 +16,7 @@ jobs:
       page_number: 10
       tempspace: tempspace
       storage_channel_path: storage/${{ matrix.channel_id }}
-      storage_channel_page: ${{env.storage_channel_path}}/page
+      storage_channel_page: storage/${{ matrix.channel_id }}/page
     steps:
       - run: |
           echo $page_number
