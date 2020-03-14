@@ -91,6 +91,7 @@ jobs:
   step2:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         channel_id: [25, 143, 230]
     steps:
@@ -149,6 +150,7 @@ jobs:
   step3:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         channel_id: [25, 143, 230]
     steps:
