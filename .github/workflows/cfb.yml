@@ -17,17 +17,15 @@ jobs:
       page_number: 10
       temp: tempspace
       temp_threads: tempspace/threads
-      storage_channel_path: storage/${{ matrix.channel_id }}
-      storage_channel_page: storage/${{ matrix.channel_id }}/page
     steps:
       - uses: actions/checkout@v2
         with:
           path: bin
           ref: "refs/heads/cfb"
-      - uses: actions/checkout@v2
-        with:
-          path: storage
-          ref: "cfb-storage"
+#       - uses: actions/checkout@v2
+#         with:
+#           path: storage
+#           ref: "cfb-storage"
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: npm i puppeteer fs-extra
@@ -35,8 +33,8 @@ jobs:
         id: init
         run: |
           mkdir -p ${storage_channel_path} ${temp_threads}
-          [ -e ${storage_channel_page} ] || echo 1 > ${storage_channel_page} # init page file if not exist
-          page=$(cat $storage_channel_page)
+          page=`curl -sL https://raw.githubusercontent.com/shinhwagk/test/cfb-storage/${{matrix.channel_id}}/page`
+          echo $page
           echo ::set-output name=page::$page
       - name: dec bin
         uses: shinhwagk/actions-crypto@master
@@ -61,11 +59,12 @@ jobs:
             let thread_number=total_thread_number
             pn=$(($pn+1));
           done
-          echo $pn > ${storage_channel_page}
-          echo "crawlar page: $pn"
+          #echo $pn > ${storage_channel_page}
+          #echo "crawlar page: $pn"
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
+        if: success()
         uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: ${{ env.tempspace }}
