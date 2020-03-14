@@ -9,10 +9,15 @@ jobs:
   step1:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         channel_id: [25, 143, 230]
-        page_number: [10]
-        tempspace: ['tempspace']
+    env:
+      page_number: 10
+      tempspace: tempspace
+      channel_folder: storage
+      storage_channel_path: storage/${{ matrix.channel_id }}
+      storage_channel_page: ${storage_channel_path}/page
     steps:
       - uses: actions/checkout@v2
         with:
@@ -28,13 +33,10 @@ jobs:
       - name: init folder and file and page
         id: init
         run: |
-          channel_dir=checkpoint/${{ matrix.channel_id }}
-          mkdir -p ${channel_dir}/threads
-          storage_page_file=storage/${{ matrix.channel_id }}/page
-          [ -e $storage_page_file ] || echo 1 > $storage_page_file # init page file if not exist
+          mkdir -p ${storage_channel_path}
+          [ -e ${storage_channel_page} ] || echo 1 > ${storage_channel_page} # init page file if not exist
           page=$(cat $storage_page_file)
           echo ::set-output name=page::$page
-          echo ::set-output name=channel_dir::$channel_dir
       - name: dec bin
         uses: shinhwagk/actions-crypto@master
         with:
@@ -44,30 +46,30 @@ jobs:
       - name: crawlar page
         run: |
           set +e
-          mkdir ${{ matrix.tempspace }};
+          mkdir ${tempspace};
           pn=${{ steps.init.outputs.page }}
           thread_number=0
-          for i in `seq 1 ${{ matrix.page_number }}`; do
+          for i in `seq 1 ${page_number}`; do
             echo $pn
-            node bin/step1.js $pn ${{ matrix.tempspace }} > /dev/null
-            total_thread_number=`ls ${{ matrix.tempspace }} | wc -l` && echo $total_thread_number $thread_number
+            node bin/step1.js $pn ${tempspace} > /dev/null
+            total_thread_number=`ls ${tempspace} | wc -l` && echo $total_thread_number $thread_number
             [ $total_thread_number -gt $thread_number ] || break;
             let thread_number=total_thread_number
             pn=$(($pn+1));
           done
-          echo $pn > storage/${{ matrix.channel_id }}/page
+          echo $pn > ${storage_channel_page}
           echo "crawlar page: $pn"
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
         uses: shinhwagk/actions-crypto@master
         with:
-          crypto-path: ${{ matrix.tempspace }}
+          crypto-path: ${tempspace}
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: push
         run: |
-          cp -r ${{ matrix.tempspace }}/* storage/${{ matrix.channel_id }}/
+          cp -r ${tempspace}/* ${storage_channel_path}/
           cd storage
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
