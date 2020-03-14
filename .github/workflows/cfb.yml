@@ -177,6 +177,7 @@ jobs:
               python bin/push.py ${{matrix.channel_id}} $tid ${file}
             done
             rm -fr storage/${{matrix.channel_id}}_success/$tid
+            echo "thread id: $tid ."
           done
       - name: push
         run: |
