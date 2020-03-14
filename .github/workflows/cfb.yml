@@ -52,7 +52,7 @@ jobs:
             echo $pn
             err=`node bin/step1.js $pn ${temp_threads} 2>&1`
             if [ $? != 0 ]; then
-              echo $err
+              echo ${err}"sss"
               break;
             fi
             total_thread_number=`ls ${temp_threads} | wc -l` && echo $total_thread_number $thread_number
