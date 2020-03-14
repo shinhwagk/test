@@ -46,6 +46,7 @@ jobs:
           for i in `seq 1 5`; do
             echo $pn
             node bin/step1.js $pn > /dev/null
+            [ `ls ${{ steps.init.outputs.channel_dir }}/threads | wc -l` == 0 ] && break;
             [ "$?" == "0" ] || break;
             pn=$(($pn+1));
           done
