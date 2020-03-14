@@ -21,37 +21,29 @@ jobs:
           path: storage
           ref: 'cfb-storage'
       - uses: actions/setup-node@v1
-      # - uses: actions/setup-python@v1
       - name: Install Dependencies
+        run: npm i puppeteer fs-extra
+      - name: init folder and file and page
+        id: init
         run: |
-          npm i -g typescript ts-node
-          # python -m pip install requests
-          npm i puppeteer fs-extra
-      - name: init folder and file
-        run: chmod +x bin/init.sh; bin/init.sh ${{ matrix.channel_id }}
+         channel_dir=checkpoint/${{ matrix.channel_id }}
+         mkdir -p ${channel_dir}/threads
+         storage_page_file=storage/${{ matrix.channel_id }}/page
+         [ -e $storage_page_file ] || echo 1 > $storage_page_file # init page file if not exist
+         page=$(cat $storage_page_file)
+         echo ::set-output name=page::$page
+         echo ::set-output name=channel_dir::$channel_dir
       - name: dec bin
         uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: bin
           crypto-action: dec
           crypto-password: ${{secrets.cfb_password}}
-      - name: dec page
-        uses: shinhwagk/actions-crypto@master
-        with:
-         crypto-path: storage/${{ matrix.channel_id }}/page.enc
-         crypto-action: dec
-         crypto-password: ${{secrets.cfb_password}}
-      - name: set page var
-        id: setpage
-        run: |
-          page=$(cat storage/${{ matrix.channel_id }}/page)
-          echo ::set-output name=page::$page
       - name: crawlar page
         run: |
           set +e
-          mkdir -p checkpoint/${{ matrix.channel_id }}
           c=0
-          pn=${{ steps.setpage.outputs.page }}
+          pn=${{ steps.init.outputs.page }}
           for i in `seq 1 5`; do
             echo $pn
             node bin/step1.js $pn > /dev/null
@@ -59,20 +51,14 @@ jobs:
             pn=$(($pn+1));
           done
           echo $c;
-          p=${{ steps.setpage.outputs.page }}
-          echo $(($p+$c)) > storage/${{ matrix.channel_id }}/page
+          # p=${{ steps.init.outputs.page }}
+          echo $pn > storage/${{ matrix.channel_id }}/page
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
         uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: checkpoint
-          crypto-action: enc
-          crypto-password: ${{secrets.cfb_password}}
-      - name: enc page
-        uses: shinhwagk/actions-crypto@master
-        with:
-          crypto-path: storage/${{ matrix.channel_id }}/page
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: push
@@ -82,7 +68,7 @@ jobs:
           git add -A
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
+          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.init.outputs.page }}"
           for i in $(seq 1 5); do
             echo "push start ##########################"
             git push && exit 0 || git pull -q --rebase
