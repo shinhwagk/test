@@ -1,4 +1,4 @@
-name: CI
+name: jd price
 
 on:
   schedule:
