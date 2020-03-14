@@ -48,7 +48,7 @@ jobs:
           for i in `seq 1 5`; do
             echo $pn
             node bin/step1.js $pn tmpspace > /dev/null
-            total_thread_number=`ls tmpspace | wc -l` && echo $total_thread_number
+            total_thread_number=`ls tmpspace | wc -l` && echo $total_thread_number $thread_number
             [ $total_thread_number -gt $thread_number ] || break;
             let thread_number+=total_thread_number
             pn=$(($pn+1));
