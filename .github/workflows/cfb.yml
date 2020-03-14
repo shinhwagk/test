@@ -69,7 +69,7 @@ jobs:
       - name: enc checkpoint
         uses: shinhwagk/actions-crypto@master
         with:
-          crypto-path: ${tempspace}
+          crypto-path: ${{ env.tempspace }}
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: push
