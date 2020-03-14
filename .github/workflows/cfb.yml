@@ -18,10 +18,17 @@ jobs:
       temp: tempspace
       temp_threads: tempspace/threads
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout cfb bin
+        uses: actions/checkout@v2
         with:
           path: bin
           ref: "refs/heads/cfb"
+      - name: Dec cfb bin
+        uses: shinhwagk/actions-crypto@master
+        with:
+          crypto-path: bin
+          crypto-action: dec
+          crypto-password: ${{secrets.cfb_password}}
 #       - uses: actions/checkout@v2
 #         with:
 #           path: storage
@@ -29,6 +36,8 @@ jobs:
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: npm i puppeteer fs-extra
+      - name: test
+        run: node bin/test.js
       - name: init folder and file and page
         id: init
         run: |
@@ -36,12 +45,7 @@ jobs:
           page=`curl -sL https://raw.githubusercontent.com/shinhwagk/test/cfb-storage/${{matrix.channel_id}}/page`
           echo $page
           echo ::set-output name=page::$page
-      - name: dec bin
-        uses: shinhwagk/actions-crypto@master
-        with:
-          crypto-path: bin
-          crypto-action: dec
-          crypto-password: ${{secrets.cfb_password}}
+
       - name: crawlar page
         run: |
           set +e
