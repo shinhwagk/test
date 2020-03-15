@@ -183,11 +183,6 @@ jobs:
         channel_id: [25, 143, 230, 229]
     env:
       push_number: 1
-      tempspace: tempspace
-      tempspace_threads: tempspace/threads
-      tempspace_threads_success: tempspace/threads_success
-      storage_channel: storage/${{matrix.channel_id}}
-      storage_channel_threads: storage/${{matrix.channel_id}}/threads
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
     steps:
       - uses: actions/checkout@v2
@@ -206,10 +201,10 @@ jobs:
           crypto-path: bin
           crypto-action: dec
           crypto-password: ${{secrets.cfb_password}}
-      - name: Init Tempspace folder,file,page
-        run: |
-          mkdir ${tempspace}
-          find ${storage_channel_threads_success} -maxdepth 1 -type d ! -name '.' | head -n ${push_number} | xargs -i cp -r {} ${tempspace}/
+      # - name: Init Tempspace folder,file,page
+      #   run: |
+      #     mkdir ${tempspace}
+      #     find ${storage_channel_threads_success} -maxdepth 1 -type d ! -name '.' | head -n ${push_number} | xargs -i cp -r {} ${tempspace}/
       - name: dec tempspace
         uses: shinhwagk/actions-crypto@master
         with:
@@ -218,18 +213,16 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push drive
         run: |
-          cd ${tempspace}
-          find . -type f | while read rawfile; do
-            rawfile_path=`dirname $rawfile`
-            rawfile_tid=${rawfile_path:2}
-            startT=`date +%s`
-            python ../bin/push.py ${{matrix.channel_id}} ${rawfile_tid} ${rawfile}
-            rm -fr ${rawfile}
-            endT=`date +%s`
-            echo "push time $(($endT-$startT))"
+          find ${storage_channel_threads_success} -maxdepth 1 -type d ! -path "${storage_channel_threads_success}" | head -n ${push_number} | while read tid; do
+            thread_folder="${storage_channel_threads_success}/${tid}"
+            find $thread_folder -type f | while read rawfile; do
+              startT=`date +%s`
+              python ./bin/push.py ${{matrix.channel_id}} ${tid} "${rawfile}"
+              endT=`date +%s`
+              echo "push time $(($endT-$startT))"
+            done
+            rm -fr ${thread_folder}
           done
-          find ./ -type -f | wc -l
-          ls . | xargs -i rm -fr ${storage_channel_threads_success}/{}
       - name: Config Github name & email
         if: success()
         run: |
