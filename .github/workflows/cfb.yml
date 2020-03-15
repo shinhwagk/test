@@ -182,7 +182,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      push_number: 30
+      push_number: 1
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       tempspace_threads_success: tempspace/threads_success
