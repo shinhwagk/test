@@ -36,8 +36,6 @@ jobs:
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: npm i puppeteer fs-extra
-      - name: test
-        run: node bin/test.js
       - name: init folder and file and page
         id: init
         run: |
@@ -45,7 +43,6 @@ jobs:
           page=`curl -sL https://raw.githubusercontent.com/shinhwagk/test/cfb-storage/${{matrix.channel_id}}/page`
           echo $page
           echo ::set-output name=page::$page
-
       - name: crawlar page
         run: |
           set +e
