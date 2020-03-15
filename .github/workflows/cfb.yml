@@ -107,7 +107,6 @@ jobs:
       thread_number: 10
       tempspace: tempspace
       tempspace_threads: tempspace/threads
-      tempspace_threads_success: tempspace/threads_success
       storage_channel: storage/${{matrix.channel_id}}
       storage_channel_threads: storage/${{matrix.channel_id}}/threads
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
@@ -134,8 +133,12 @@ jobs:
       - name: Init Tempspace folder,file,page
         id: init
         run: |
-          mkdir -p ${tempspace_threads} ${tempspace_threads_success} ${storage_channel_threads_success}
-          find ${storage_channel_threads} -maxdepth 1 -type f | head -n ${thread_number} | xargs -I @ cp @ ${tempspace_threads}/
+          mkdir -p ${tempspace_threads} ${storage_channel_threads_success}
+          find ${storage_channel_threads} -type f | head -n ${thread_number} | while read thread_file; do
+            meta_file=`basename ${thread_file}`
+            thread_id=${meta_file::-9}
+            mkdir -p "${tempspace_threads}/${thread_id}"
+          done
       - name: dec tempspace threads
         uses: shinhwagk/actions-crypto@master
         with:
@@ -144,29 +147,30 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: Crawlar Threads
         run: |
-          ls ${tempspace_threads} | while read file; do
-            tid=${file::-5}
-            cp_t_path=${tempspace_threads_success}/${tid}
-            mkdir -p $cp_t_path
-            node bin/step2.js $tid $cp_t_path
-            cp ${tempspace_threads}/${file} ${cp_t_path}/meta.json
-            rm -fr ${storage_channel_threads}/${file}.enc
-            echo "${file} success."
+          find ${tempspace_threads} -maxdepth 1 -type d ! -path ${tempspace_threads} | while read thread_folder; do
+            tid=${thread_folder#*/}
+            node bin/step2.js $tid $thread_folder
+            rm -fr ${storage_channel_threads}/${tid}.json.enc
+            echo "${tid} success."
           done
         env:
           channel_id: ${{ matrix.channel_id }}
-      - name: enc tempspace_threads_success
+      - name: enc tempspace_threads
         uses: shinhwagk/actions-crypto@master
         with:
-          crypto-path: ${{env.tempspace_threads_success}}
+          crypto-path: ${{env.tempspace_threads}}
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
-      - name: push
+      - name: Config Github name & email
+        if: success()
         run: |
-          cp -r ${tempspace_threads_success}/* ${storage_channel_threads_success}/ && cd storage
-          git add -A
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+      - name: push
+        run: |
+          cp -r ${tempspace_threads}/* ${storage_channel_threads_success}/ && cd storage
+          git add ${storage_channel_threads_success}
+          git add ${storage_channel_threads}
           [ `git status -s | wc -l` != 0 ] && \
           git commit -q -m "channel ${{ matrix.channel_id }} threads ${thread_number}"
           for i in $(seq 1 5); do
