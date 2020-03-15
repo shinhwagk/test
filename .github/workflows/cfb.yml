@@ -184,7 +184,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      push_number: 10
+      push_number: 30
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       tempspace_threads_success: tempspace/threads_success
@@ -221,7 +221,7 @@ jobs:
       - name: push drive
         run: |
           cd ${tempspace}
-          find . -type f | while read rawfile; do
+          find . -type f | head -n ${push_number} | while read rawfile; do
             rawfile_path=`dirname $rawfile`
             rawfile_tid=${rawfile_path:2}
             startT=`date +%s`
