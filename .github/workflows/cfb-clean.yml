@@ -18,4 +18,5 @@ jobs:
           ref: "cfb-storage"
       - name: Clean
         run: |
-          find storage/${matrix.channel_id}/threads/ -type d ! -name '..' ! -name '.' -exec rm -rf '{}' \;
+          cd storage/${matrix.channel_id}/threads
+          find . -type d ! -name '..' ! -name '.' -exec rm -rf '{}' \;
