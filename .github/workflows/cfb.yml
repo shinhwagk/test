@@ -1,4 +1,4 @@
-name: crawlers
+name: CFB Crawlers
 on:
   push:
     branches: master
