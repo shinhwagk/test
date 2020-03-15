@@ -25,9 +25,9 @@ jobs:
       - name: Clean2
         run: |
           cd storage/${{matrix.channel_id}}
-          ls ./ | while read line; do
-            [ $line == 'page' ] && continue
-            [ $line == 'page.enc' ] && continue
+          ls ./ | head -1000 | while read line; do
+            [ $line == 'page' ] && continue;
+            [ $line == 'page.enc' ] && continue;
             [ -f $line ] && rm -f $line; 
           done
       - name: Clean3
