@@ -1,0 +1,21 @@
+name: crawlers
+on: push
+
+jobs:
+  step1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        channel_id: [25, 143, 230, 229]
+    steps:
+      - name: Checkout cfb storage
+        if: success()
+        uses: actions/checkout@v2
+        with:
+          path: storage
+          ref: "cfb-storage"
+      - name: Clean
+        run: |
+          find storage/${matrix.channel_id}/threads -type d ! -name '..' ! -name '.' -exec rm -rf '{}' \;
