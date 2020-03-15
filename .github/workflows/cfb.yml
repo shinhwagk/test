@@ -104,7 +104,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      thread_number: 10
+      thread_number: 2
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       storage_channel: storage/${{matrix.channel_id}}
@@ -148,6 +148,7 @@ jobs:
       - name: Crawlar Threads
         run: |
           find ${tempspace_threads} -maxdepth 1 -type d ! -path ${tempspace_threads} | while read thread_folder; do
+            ps -ef
             tid=${thread_folder##*/}
             echo "$tid $thread_folder `pwd`"
             node bin/step2.js $tid $thread_folder
