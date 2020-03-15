@@ -88,7 +88,7 @@ jobs:
           cd storage
           git add -A
           [ `git status -s | wc -l` != 0 ] && \
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.init.outputs.page }}"
+          git commit -q -m "channel ${{ matrix.channel_id }} page ${page}"
           for i in $(seq 1 5); do
             echo "push start ##########################"
             git push && exit 0 || git pull -q --rebase
