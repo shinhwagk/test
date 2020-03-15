@@ -182,7 +182,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      push_number: 1
+      push_number: 10
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
     steps:
       - uses: actions/checkout@v2
