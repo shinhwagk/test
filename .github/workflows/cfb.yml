@@ -96,7 +96,6 @@ jobs:
             echo "retry ${i}."
           done
           echo "###################################"
-          exit 1
   step2:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -175,7 +174,6 @@ jobs:
             sleep 5
             echo "retry ${i}."
           done
-          exit 1
   step3:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -245,4 +243,3 @@ jobs:
             sleep 5
             echo "retry ${i}."
           done
-          exit 1
