@@ -1,7 +1,7 @@
 name: cfb crawlers
 on:
   push:
-    paths: 
+    paths:
       - ".github/workflows/cfb.yml"
   schedule:
     - cron: "*/2 * * * *"
@@ -145,16 +145,16 @@ jobs:
           crypto-path: ${{env.tempspace_threads}}
           crypto-action: dec
           crypto-password: ${{secrets.cfb_password}}
-      - name: crawlar thread
+      - name: Crawlar Threads
         run: |
           ls ${tempspace_threads} | while read file; do
-            tid=${file:-9}
+            tid=${file::-5}
             cp_t_path=${tempspace_threads_success}/${tid}
             mkdir -p $cp_t_path
             node bin/step2.js $tid $cp_t_path && \
-            mv ${storage_channel_threads}/${file} ${cp_t_path}/ && \
+            mv ${tempspace_threads}/${file} ${cp_t_path}/ && \
             ls -l $cp_t_path && \
-            rm -fr ${storage_channel_threads}/${file}
+            rm -fr ${storage_channel_threads}/${file}.enc
             ls -l ${tempspace_threads_success}
           done
         env:
