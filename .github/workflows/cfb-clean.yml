@@ -19,10 +19,14 @@ jobs:
         with:
           path: storage
           ref: "cfb-storage"
-      - name: Clean
+      - name: Clean1
         run: |
           cd storage/${{matrix.channel_id}}/threads
           ls ./ | while read line; do [ -d $line ] && echo "clean: $line" && rm -fr $line; done
+      - name: Clean2
+        run: |
+          cd storage/${{matrix.channel_id}}
+          ls ./ | while read line; do [ -f $line ] && echo "clean: $line" && rm -f $line; done
       - name: Config Github name & email
         run: |
           git config --global user.name ${GITHUB_ACTOR}
