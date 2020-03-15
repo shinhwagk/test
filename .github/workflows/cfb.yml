@@ -57,7 +57,8 @@ jobs:
             node bin/step1.js ${page} ${tempspace_threads}
             if [ $? == 0 ]; then
               echo ::set-env name=isNew::${{true}}
-              echo ::set-env name=page::$(($page+1))
+              page=$(($page+1))
+              echo ::set-env name=page::$page
             fi
           done
           echo "crawlar page: $page"
