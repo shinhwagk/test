@@ -22,7 +22,7 @@ jobs:
       - name: Clean
         run: |
           cd storage/${{matrix.channel_id}}/threads
-          find . -type d ! -name '..' ! -name '.' -exec rm -rf '{}' \;
+          ls ./ | while read line; do [ -d $line ] && echo $line && rm -fr $line; done
       - name: push
         if: success()
         run: |
