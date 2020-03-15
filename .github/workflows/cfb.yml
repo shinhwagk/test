@@ -84,8 +84,8 @@ jobs:
       - name: push
         if: success()
         run: |
-          mkdir -p ${storage_channel}
-          cp -r ${tempspace}/* ${storage_channel}/
+          mkdir -p ${storage_channel} ${storage_channel_threads}
+          cp -r ${tempspace}/* ${storage_channel_threads}/
           echo ${page} > ${storage_channel_page}
           cd storage
           git add -A
