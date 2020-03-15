@@ -15,7 +15,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      page_number: 10
+      page_number: 20
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       tempspace_page: tempspace/page
@@ -99,7 +99,7 @@ jobs:
           exit 1
   step2:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
