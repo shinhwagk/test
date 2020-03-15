@@ -22,7 +22,7 @@ jobs:
       - name: Clean
         run: |
           cd storage/${{matrix.channel_id}}/threads
-          ls ./ | while read line; do [ -d $line ] && echo $line && rm -fr $line; done
+          ls ./ | while read line; do [ -d $line ] && echo "clean: $line" && rm -fr $line; done
       - name: push
         if: success()
         run: |
