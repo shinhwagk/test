@@ -228,6 +228,7 @@ jobs:
             endT=`date +%s`
             echo "push time $(($endT-$startT))"
           done
+          find ./ -type -f | wc -l
           ls . | xargs -i rm -fr ${storage_channel_threads_success}/{}
       - name: Config Github name & email
         if: success()
