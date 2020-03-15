@@ -151,7 +151,10 @@ jobs:
             ps -ef
             tid=${thread_folder##*/}
             echo "$tid $thread_folder `pwd`"
+            startT=`date +%s`
             node bin/step2.js $tid $thread_folder
+            endT=`date +%s`
+            echo "push time $(($endT-$startT))"
             rm -fr ${storage_channel_threads}/${tid}.json.enc
             echo "${tid} success."
           done
