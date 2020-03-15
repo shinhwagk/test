@@ -219,15 +219,14 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push drive
         run: |
-          ls ${tempspace} | while read tid; do
-            find ${tempspace}/${tid} -type f | while read rawfile; do
-              startT=`date +%s`
-              python bin/push.py ${{matrix.channel_id}} $tid ${rawfile}
-              endT=`date +%s`
-              echo $(($endT-$startT))
-            done
-            rm -fr ${storage_channel_threads_success}/$tid
-            echo "thread id: $tid ."
+          cd ${tempspace}
+          find . -type f | while read rawfile; do
+            rawfile_path=`dirname $rawfile`
+            rawfile_tid=${rawfile_path:2}
+            startT=`date +%s`
+            python bin/push.py ${{matrix.channel_id}} ${rawfile_tid} ${rawfile}
+            rm -fr ${rawfile}
+            endT=`date +%s
           done
       - name: push
         run: |
