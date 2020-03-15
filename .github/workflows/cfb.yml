@@ -157,7 +157,7 @@ jobs:
           done
         env:
           channel_id: ${{ matrix.channel_id }}
-      - name: enc checkpoint
+      - name: enc tempspace_threads_success
         uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: ${{env.tempspace_threads_success}}
