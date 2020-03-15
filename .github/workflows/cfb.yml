@@ -64,15 +64,18 @@ jobs:
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: Checkout cfb-storage
+        if: success()
         uses: actions/checkout@v2
         with:
           path: storage
           ref: "cfb-storage"
       - name: Config Github name & email
+        if: success()
         run: |
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
+        if: success()
         run: |
           cp -r ${tempspace}/* ${storage_channel_threads}/
           echo ${{env.page}} > ${{env.storage_channel_page}}
