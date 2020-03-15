@@ -226,7 +226,8 @@ jobs:
             startT=`date +%s`
             python bin/push.py ${{matrix.channel_id}} ${rawfile_tid} ${rawfile}
             rm -fr ${rawfile}
-            endT=`date +%s
+            endT=`date +%s`
+            echo $(($endT-$startT))
           done
       - name: push
         run: |
