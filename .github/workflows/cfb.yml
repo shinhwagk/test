@@ -50,9 +50,10 @@ jobs:
             if [ $? == 0 ]; then
               echo ::set-env name=isNew::${{true}}
               page=$(($page+1));
+              echo ::set-env name=page::$page
+              echo ::set-env name=aaaa::true
             fi
           done
-          echo ::set-env name=page::$page
           echo "crawlar page: $page"
         env:
           channel_id: ${{ matrix.channel_id }}
