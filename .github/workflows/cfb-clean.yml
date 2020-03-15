@@ -1,6 +1,9 @@
 name: cfb clean
-on: push
-
+on:
+  push:
+    paths: 
+      - "cfb-clean"
+  
 jobs:
   step1:
     runs-on: ubuntu-latest
