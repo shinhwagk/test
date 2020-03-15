@@ -224,7 +224,7 @@ jobs:
             rawfile_path=`dirname $rawfile`
             rawfile_tid=${rawfile_path:2}
             startT=`date +%s`
-            python bin/push.py ${{matrix.channel_id}} ${rawfile_tid} ${rawfile}
+            python ../bin/push.py ${{matrix.channel_id}} ${rawfile_tid} ${rawfile}
             rm -fr ${rawfile}
             endT=`date +%s`
             echo $(($endT-$startT))
