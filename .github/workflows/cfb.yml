@@ -42,10 +42,8 @@ jobs:
         id: init
         run: |
           code=`curl -s -o ${tempspace_page} -w "%{http_code}" ${channel_page_url}`
-          if [ $code == 404 ]; then
-            echo 0 > ${tempspace_page}
-          fi
-          page=`echo ${tempspace_page}`
+          [ $code == 404 ] && echo 0 > ${tempspace_page}
+          page=`cat ${tempspace_page}`
           echo ::set-env name=page::$page
           mkdir -p ${tempspace_threads} ${tempspace_page_error}
       - name: crawlar page
