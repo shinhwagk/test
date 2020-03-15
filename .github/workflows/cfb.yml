@@ -238,6 +238,7 @@ jobs:
         run: |
           cd storage
           git add -A
+          git status -s
           [ `git status -s | wc -l` != 0 ] && \
           git commit -q -m "channel ${{ matrix.channel_id }} push ${push_number}"
           for i in $(seq 1 5); do
