@@ -23,6 +23,10 @@ jobs:
         run: |
           cd storage/${{matrix.channel_id}}/threads
           ls ./ | while read line; do [ -d $line ] && echo "clean: $line" && rm -fr $line; done
+      - name: Config Github name & email
+        run: |
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
         if: success()
         run: |
