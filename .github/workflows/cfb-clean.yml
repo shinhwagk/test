@@ -2,7 +2,7 @@ name: cfb clean
 on:
   push:
     paths: 
-      - ".github/workfolws/cfb-clean.yml"
+      - ".github/workflows/cfb-clean.yml"
   
 jobs:
   step1:
