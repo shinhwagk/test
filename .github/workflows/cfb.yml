@@ -39,7 +39,6 @@ jobs:
       - name: Install Dependencies
         run: npm i puppeteer fs-extra
       - name: Init Tempspace folder,file,page
-        id: init
         run: |
           mkdir -p ${tempspace_threads}
           code=`curl -s -o ${tempspace_page} -w "%{http_code}" ${channel_page_url}`
