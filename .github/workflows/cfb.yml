@@ -137,7 +137,7 @@ jobs:
         id: init
         run: |
           mkdir -p ${tempspace_threads} ${tempspace_threads_success} ${storage_channel_threads_success}
-          ls ${storage_channel_threads} | grep '.json.enc' | wc -l
+          ls ${storage_channel_threads} | grep '.json.enc' | head -10
           ls ${storage_channel_threads} | grep '.json.enc' | head -10 | while read file; do
             cp "${storage_channel_threads}/${file}" ${tempspace_threads}
           done
