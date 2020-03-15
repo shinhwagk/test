@@ -169,7 +169,7 @@ jobs:
           git add -A
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-          git commit -q -m "channel ${{ matrix.channel_id }} page ${{ steps.setpage.outputs.page }}"
+          git commit -q -m "channel ${{ matrix.channel_id }} threads ${thread_number}"
           for i in $(seq 1 5); do
             git push && exit 0 || git pull -q --rebase
             sleep 5
