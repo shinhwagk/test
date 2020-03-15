@@ -57,7 +57,7 @@ jobs:
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc checkpoint
-        if: env.isNew
+        if: env.isNew == true
         uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: ${{ env.tempspace }}
