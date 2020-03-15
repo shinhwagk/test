@@ -156,7 +156,7 @@ jobs:
             mv ${storage_channel_threads}/${file} ${cp_t_path}/ && \
             ls -l $cp_t_path && \
             rm -fr ${storage_channel_threads}/${file}
-            ls -l tempspace_threads_success
+            ls -l ${tempspace_threads_success}
           done
         env:
           channel_id: ${{ matrix.channel_id }}
@@ -168,7 +168,7 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push
         run: |
-          cp -r tempspace_threads_success/* storage_channel_threads_success/ && cd storage
+          cp -r ${tempspace_threads_success}/* ${storage_channel_threads_success}/ && cd storage
           git add -A
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
