@@ -42,6 +42,7 @@ jobs:
         id: init
         run: |
           code=`curl -s -o ${tempspace_page} -w "%{http_code}" ${channel_page_url}`
+          echo $code
           [ $code == 404 ] && echo 0 > ${tempspace_page}
           echo ::set-env name=page::`cat ${tempspace_page}`
           mkdir -p ${tempspace_threads}
