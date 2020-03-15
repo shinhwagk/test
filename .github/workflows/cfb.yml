@@ -1,7 +1,8 @@
 name: cfb crawlers
 on:
   push:
-    branches: master
+    paths: 
+      - ".github/workflows/cfb.yml"
   schedule:
     - cron: "*/2 * * * *"
 
@@ -18,7 +19,6 @@ jobs:
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       tempspace_page: tempspace/page
-      tempspace_page_error: tempspace/page_error
       storage_channel: storage/${{matrix.channel_id}}
       storage_channel_threads: storage/${{matrix.channel_id}}/threads
       storage_channel_page: storage/${{matrix.channel_id}}/page
@@ -41,12 +41,11 @@ jobs:
       - name: Init Tempspace folder,file,page
         id: init
         run: |
-          mkdir -p ${tempspace}
+          mkdir -p ${tempspace_threads}
           code=`curl -s -o ${tempspace_page} -w "%{http_code}" ${channel_page_url}`
           echo $code
           [ $code == 404 ] && echo 0 > ${tempspace_page}
           echo ::set-env name=page::`cat ${tempspace_page}`
-          mkdir -p ${tempspace_threads}
       - name: crawlar page
         run: |
           set +e
@@ -63,11 +62,11 @@ jobs:
           echo "crawlar page: $page"
         env:
           channel_id: ${{ matrix.channel_id }}
-      - name: enc checkpoint
+      - name: enc tempspace threads
         if: env.isNew == 'true'
         uses: shinhwagk/actions-crypto@master
         with:
-          crypto-path: ${{ env.tempspace }}
+          crypto-path: ${{ env.tempspace_threads }}
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: Checkout cfb-storage
@@ -137,9 +136,8 @@ jobs:
         id: init
         run: |
           mkdir -p ${tempspace_threads} ${tempspace_threads_success} ${storage_channel_threads_success}
-          ls ${storage_channel_threads} | grep '.json.enc' | head -10
-          ls ${storage_channel_threads} | grep '.json.enc' | head -10 | while read file; do
-            cp "${storage_channel_threads}/${file}" ${tempspace_threads}
+          ls ${storage_channel_threads} | head -10 | while read tfile; do
+            cp "${storage_channel_threads}/${tfile}" ${tempspace_threads}
           done
       - name: dec tempspace threads
         uses: shinhwagk/actions-crypto@master
@@ -149,7 +147,7 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: crawlar thread
         run: |
-          ls ${tempspace_threads} | head -10 | while read file; do
+          ls ${tempspace_threads} | while read file; do
             tid=${file:-9}
             cp_t_path=${tempspace_threads_success}/${tid}
             mkdir -p $cp_t_path
@@ -180,6 +178,7 @@ jobs:
             echo "retry ${i}."
           done
           exit 1
+
 #   step3:
 #     runs-on: ubuntu-latest
 #     timeout-minutes: 5
