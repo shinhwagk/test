@@ -17,9 +17,12 @@ jobs:
       page_number: 10
       tempspace: tempspace
       tempspace_threads: tempspace/threads
+      tempspace_page: tempspace/page
       tempspace_page_error: tempspace/page_error
+      storage_channel: storage/${{matrix.channel_id}}
       storage_channel_threads: storage/${{matrix.channel_id}}/threads
       storage_channel_page: storage/${{matrix.channel_id}}/page
+      channel_page_url: https://raw.githubusercontent.com/shinhwagk/test/cfb-storage/${{matrix.channel_id}}/page
     steps:
       - name: Checkout cfb bin
         uses: actions/checkout@v2
@@ -35,23 +38,26 @@ jobs:
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: npm i puppeteer fs-extra
-      - name: init folder and file and page
+      - name: Init Tempspace folder,file,page
         id: init
         run: |
+          curl -s -o ${tempspace_page} -w "%{http_code}" ${channel_page_url}
+          if [ $code == 404 ]; then
+            echo 0 > ${tempspace_page}
+          fi
+          page=`echo ${tempspace_page}`
+          echo ::set-env name=page::$page
           mkdir -p ${tempspace_threads} ${tempspace_page_error}
       - name: crawlar page
         run: |
-          page=`curl -sL https://raw.githubusercontent.com/shinhwagk/test/cfb-storage/${{matrix.channel_id}}/page`
           set +e
           echo ::set-env name=isNew::${{false}}
           for i in `seq 1 ${page_number}`; do
             echo $page
-            node bin/step1.js $page ${tempspace_threads}
+            node bin/step1.js ${page} ${tempspace_threads}
             if [ $? == 0 ]; then
               echo ::set-env name=isNew::${{true}}
-              page=$(($page+1));
-              echo ::set-env name=page::$page
-              echo ::set-env name=aaaa::true
+              echo ::set-env name=page::$(($page+1))
             fi
           done
           echo "crawlar page: $page"
@@ -78,7 +84,7 @@ jobs:
       - name: push
         if: success()
         run: |
-          cp -r ${tempspace_threads}/* ${storage_channel_threads}/
+          cp -r ${tempspace}/* ${storage_channel}/
           echo ${page} > ${storage_channel_page}
           cd storage
           git add -A
