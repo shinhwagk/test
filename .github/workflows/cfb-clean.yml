@@ -2,7 +2,7 @@ name: cfb clean
 on:
   push:
     paths: 
-      - "cfb-clean"
+      - ".github/workfolws/cfb-clean.yml"
   
 jobs:
   step1:
@@ -23,3 +23,17 @@ jobs:
         run: |
           cd storage/${{matrix.channel_id}}/threads
           find . -type d ! -name '..' ! -name '.' -exec rm -rf '{}' \;
+      - name: push
+        if: success()
+        run: |
+          cd storage
+          git add -A
+          [ `git status -s | wc -l` != 0 ] && \
+          git commit -q -m "cfb clean ${{matrix.channel_id}}"
+          for i in $(seq 1 5); do
+            echo "push start ##########################"
+            git push && exit 0 || git pull -q --rebase
+            sleep 5
+            echo "retry ${i}."
+          done
+          exit 1
