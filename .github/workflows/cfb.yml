@@ -170,9 +170,9 @@ jobs:
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
         run: |
+          mkdir -p ${storage_channel_threads_success}
           cp -r ${tempspace_threads}/* ${storage_channel_threads_success}/ && cd storage
-          git add ${storage_channel_threads_success}
-          git add ${storage_channel_threads}
+          git add -A
           [ `git status -s | wc -l` != 0 ] && \
           git commit -q -m "channel ${{ matrix.channel_id }} threads ${thread_number}"
           for i in $(seq 1 5); do
