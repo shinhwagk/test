@@ -41,6 +41,7 @@ jobs:
       - name: Init Tempspace folder,file,page
         id: init
         run: |
+          mkdir -p ${tempspace}
           code=`curl -s -o ${tempspace_page} -w "%{http_code}" ${channel_page_url}`
           echo $code
           [ $code == 404 ] && echo 0 > ${tempspace_page}
