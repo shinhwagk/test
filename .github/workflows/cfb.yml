@@ -230,6 +230,7 @@ jobs:
             endT=`date +%s`
             echo "push time $(($endT-$startT))"
           done
+          ls ${tempspace} | xargs -i rm -fr ${storage_channel_threads_success}/{}
       - name: push
         if: always()
         run: |
@@ -238,7 +239,7 @@ jobs:
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           [ `git status -s | wc -l` != 0 ] && \
-          git commit -q -m "channel ${{ matrix.channel_id }} push ${push_number}"
+          git commit -q -m "channel ${{ matrix.channel_id }} push ${push_number}" && \
           for i in $(seq 1 5); do
             git push && exit 0 || git pull -q --rebase
             sleep 5
