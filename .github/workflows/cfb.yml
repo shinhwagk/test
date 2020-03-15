@@ -136,10 +136,8 @@ jobs:
         id: init
         run: |
           mkdir -p ${tempspace_threads} ${tempspace_threads_success} ${storage_channel_threads_success}
-          # find . ${storage_channel_threads} -maxdepth 1 -type f | head -n ${thread_number} | xargs cp 
-          #   cp "${storage_channel_threads}/${tfile}" ${tempspace_threads}
-          # done
           find ${storage_channel_threads} -maxdepth 1 -type f | head -n ${thread_number} | xargs -I @ cp @ ${tempspace_threads}/
+          ls -l ${tempspace_threads}
       - name: dec tempspace threads
         uses: shinhwagk/actions-crypto@master
         with:
@@ -148,6 +146,7 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: Crawlar Threads
         run: |
+          ls -l ${tempspace_threads}
           ls ${tempspace_threads} | while read file; do
             tid=${file::-5}
             cp_t_path=${tempspace_threads_success}/${tid}
