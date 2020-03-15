@@ -9,13 +9,13 @@ on:
 jobs:
   step1:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      page_number: 20
+      page_number: 10
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       tempspace_page: tempspace/page
@@ -98,7 +98,7 @@ jobs:
           echo "###################################"
   step2:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -176,7 +176,7 @@ jobs:
           done
   step3:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
