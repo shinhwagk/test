@@ -219,7 +219,7 @@ jobs:
       - name: push drive
         run: |
           cd ${tempspace}
-          find . -type f | head -n ${push_number} | while read rawfile; do
+          find . -type f | while read rawfile; do
             rawfile_path=`dirname $rawfile`
             rawfile_tid=${rawfile_path:2}
             startT=`date +%s`
@@ -228,7 +228,7 @@ jobs:
             endT=`date +%s`
             echo "push time $(($endT-$startT))"
           done
-          ls ${tempspace} | xargs -i rm -fr ${storage_channel_threads_success}/{}
+          ls . | xargs -i rm -fr ${storage_channel_threads_success}/{}
       - name: push
         if: always()
         run: |
