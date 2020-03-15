@@ -84,6 +84,7 @@ jobs:
       - name: push
         if: success()
         run: |
+          mkdir -p ${storage_channel}
           cp -r ${tempspace}/* ${storage_channel}/
           echo ${page} > ${storage_channel_page}
           cd storage
