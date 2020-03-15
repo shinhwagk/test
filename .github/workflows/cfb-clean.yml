@@ -25,11 +25,7 @@ jobs:
       - name: Clean2
         run: |
           cd storage/${{matrix.channel_id}}
-          ls ./ | head -1000 | while read line; do
-            [ $line == 'page' ] && continue;
-            [ $line == 'page.enc' ] && continue;
-            [ -f $line ] && rm -f $line; 
-          done
+          rm -fr ./*.json.enc
       - name: Clean3
         run: |
           rm -fr storage/${{matrix.channel_id}}_success
