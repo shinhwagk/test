@@ -235,10 +235,12 @@ jobs:
       - name: push drive
         run: |
           function push_drive() {
+            echo "push $1"
             startT=`date +%s`
             rfpath=`dirname ${1}`; thread_id=${rfpath##*/}
             python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${1}" && rm -f ${1}
-            endT=`date +%s` && echo "push time $(($endT-$startT))"
+            endT=`date +%s`;
+            echo "push time $(($endT-$startT))"
           }
           find ${storage_channel_threads_success} -type f | head -n ${push_number} | while read rawfile; do
             push_drive $rawfile &
