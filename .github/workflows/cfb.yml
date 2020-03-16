@@ -148,7 +148,6 @@ jobs:
       - name: Crawlar Threads
         run: |
           find ${tempspace_threads} -maxdepth 1 -type d ! -path ${tempspace_threads} | while read thread_folder; do
-            ps -ef
             tid=${thread_folder##*/}
             echo "$tid $thread_folder `pwd`"
             startT=`date +%s`
