@@ -243,10 +243,9 @@ jobs:
             endT=`date +%s`;
             echo "push time $(($endT-$startT))"
           }
-          find ${storage_channel_threads_success} -type f | head -n ${push_number} | while read rawfile; do
+          while read rawfile; do
             push_drive $rawfile &
-          done;
-          
+          done <<< `find ${storage_channel_threads_success} -type f | head -n ${push_number}`
           wait
       - name: Config Github name & email
         if: success()
