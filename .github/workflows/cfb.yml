@@ -236,12 +236,14 @@ jobs:
         run: |
           find ${storage_channel_threads_success} -maxdepth 1 -type d ! -path "${storage_channel_threads_success}" | head -n ${push_number} | while read thread_folder; do
             thread_id=${thread_folder##*/}
+            echo "push tid: ${thread_id} start."
             find $thread_folder -type f | while read rawfile; do
               startT=`date +%s`
               python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${rawfile}"
               endT=`date +%s`
               echo "push time $(($endT-$startT))"
             done
+            echo "push tid: ${thread_id} end."
             rm -fr ${thread_folder}
           done
       - name: Config Github name & email
