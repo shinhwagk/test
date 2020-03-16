@@ -236,7 +236,7 @@ jobs:
         run: |
           find ${storage_channel_threads_success} -type f | head -n ${push_number} | while read rawfile; do
             startT=`date +%s`
-            rfpath=`dirname $a`; thread_id=${rfpath##*/}
+            rfpath=`dirname $rawfile`; thread_id=${rfpath##*/}
             python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${rawfile}" && rm -f $rawfile
             endT=`date +%s` && echo "push time $(($endT-$startT))"
           done
