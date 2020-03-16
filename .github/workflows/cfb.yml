@@ -244,7 +244,8 @@ jobs:
           }
           find ${storage_channel_threads_success} -type f | head -n ${push_number} | while read rawfile; do
             push_drive $rawfile &
-          done
+          done;
+          
           wait
       - name: Config Github name & email
         if: success()
