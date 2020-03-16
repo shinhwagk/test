@@ -191,7 +191,7 @@ jobs:
           [ `git status -s | wc -l` != 0 ] && \
           git commit -q -m "channel ${{ matrix.channel_id }} threads ${thread_number}"
           for i in $(seq 1 5); do
-            git push && exit 0 || git pull -q --rebase
+            git push && exit 0 || git pull -q --rebase || echo 'retry'
             sleep 5
             echo "retry ${i}."
           done
