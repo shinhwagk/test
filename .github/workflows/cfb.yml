@@ -234,7 +234,6 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push drive
         run: |
-          wait --help
           function push_drive() {
             echo "push $1"
             startT=`date +%s`
