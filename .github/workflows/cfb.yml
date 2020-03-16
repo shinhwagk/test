@@ -110,6 +110,7 @@ jobs:
       storage_channel: storage/${{matrix.channel_id}}
       storage_channel_threads: storage/${{matrix.channel_id}}/threads
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
+      storage_channel_threads_error: storage/${{matrix.channel_id}}/threads_error
     steps:
       - uses: actions/checkout@v2
         with:
@@ -133,7 +134,7 @@ jobs:
       - name: Init Tempspace folder,file,page
         id: init
         run: |
-          mkdir -p ${tempspace_threads} ${storage_channel_threads_success}
+          mkdir -p ${tempspace_threads} ${storage_channel_threads_success} ${storage_channel_threads_error}
           find ${storage_channel_threads} -type f | head -n ${thread_number} | while read thread_file; do
             meta_file=`basename ${thread_file}`
             thread_id=${meta_file::-9}
@@ -147,15 +148,27 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: Crawlar Threads
         run: |
+          set +e
           find ${tempspace_threads} -maxdepth 1 -type d ! -path ${tempspace_threads} | while read thread_folder; do
             tid=${thread_folder##*/}
             echo "$tid $thread_folder `pwd`"
             startT=`date +%s`
             node bin/step2.js $tid $thread_folder
-            endT=`date +%s`
-            echo "push time $(($endT-$startT))"
-            rm -fr ${storage_channel_threads}/${tid}.json.enc
-            echo "${tid} success."
+            RC=$?
+            if [ $RC == 0 ]; then
+              rm -fr ${storage_channel_threads}/${tid}.json.enc
+              endT=`date +%s`
+              echo "${tid} success."
+              echo "push time $(($endT-$startT))"
+            fi
+            if [ $RC == 1 ]; then
+              continue
+            fi
+            
+            if [ $RC == 127 ]; then
+              echo "$tid error 127"
+              mv ${storage_channel_threads}/${tid}.json.enc ${storage_channel_threads_error}/
+            fi
           done
         env:
           channel_id: ${{ matrix.channel_id }}
