@@ -234,12 +234,16 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: push drive
         run: |
-          find ${storage_channel_threads_success} -type f | head -n ${push_number} | while read rawfile; do
+          function push_drive() {
             startT=`date +%s`
-            rfpath=`dirname $rawfile`; thread_id=${rfpath##*/}
-            python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${rawfile}" && rm -f $rawfile
+            rfpath=`dirname ${1}`; thread_id=${rfpath##*/}
+            python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${1}" && rm -f ${1}
             endT=`date +%s` && echo "push time $(($endT-$startT))"
+          }
+          find ${storage_channel_threads_success} -type f | head -n ${push_number} | while read rawfile; do
+            push_drive $1 &
           done
+          wait
       - name: Config Github name & email
         if: success()
         run: |
