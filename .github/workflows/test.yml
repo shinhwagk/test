@@ -19,7 +19,7 @@ jobs:
 #       - name: Show MySQL Variables
 #         run: mysql -uroot -p'password' -h127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -e "show variables where Variable_name in ('server_id','log_bin','lower_case_table_names','version');"
 
-      - run: apt install -y chromium-browser
+      - run: sud apt-get install -y chromium-browser
 #       - uses: actions/setup-node@v1
 #       - run: npm i -g ts-node typescript
 #       - run: npm i
