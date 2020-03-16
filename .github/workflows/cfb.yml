@@ -3,8 +3,8 @@ on:
   push:
     paths:
       - ".github/workflows/cfb.yml"
-  schedule:
-    - cron: "*/2 * * * *"
+#   schedule:
+#     - cron: "*/2 * * * *"
 
 jobs:
   step1:
