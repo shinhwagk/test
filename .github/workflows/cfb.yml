@@ -181,9 +181,6 @@ jobs:
               echo "${tid} success."
               echo "push time $(($endT-$startT))"
             fi
-            if [ $RC == 1 ]; then
-              continue
-            fi
             if [ $RC == 127 ]; then
               echo "$tid error 127"
               mv ${storage_channel_threads}/${tid}.json.enc ${storage_channel_threads_error}/
