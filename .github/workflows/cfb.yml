@@ -3,8 +3,8 @@ on:
   push:
     paths:
       - ".github/workflows/cfb.yml"
-#   schedule:
-#     - cron: "*/2 * * * *"
+  schedule:
+    - cron: "*/2 * * * *"
 
 jobs:
   step1:
@@ -108,13 +108,13 @@ jobs:
           echo "###################################"
   step2:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      thread_number: 10
+      thread_number: 20
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       storage_channel: storage/${{matrix.channel_id}}
@@ -183,7 +183,6 @@ jobs:
             if [ $RC == 1 ]; then
               continue
             fi
-            
             if [ $RC == 127 ]; then
               echo "$tid error 127"
               mv ${storage_channel_threads}/${tid}.json.enc ${storage_channel_threads_error}/
