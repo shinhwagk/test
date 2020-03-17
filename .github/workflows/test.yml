@@ -22,7 +22,7 @@ jobs:
       - run: sudo apt-get install -y chromium-browser
       - run: chromium-browser --headless --remote-debugging-port=9222 &
       - run: ps aux |grep chromium-browser | grep -q -v grep
-      - run: curl http://127.0.0.1:9222/json/version
+      - run: curl -s http://127.0.0.1:9222/json/version | grep 'webSocketDebuggerUrl' | grep -v grep
 #       - uses: actions/setup-node@v1
 #       - run: npm i -g ts-node typescript
 #       - run: npm i
