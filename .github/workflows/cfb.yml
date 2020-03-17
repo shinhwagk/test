@@ -79,18 +79,18 @@ jobs:
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: Checkout cfb-storage
-        if: success()
+        if: env.isNew == 'true'
         uses: actions/checkout@v2
         with:
           path: storage
           ref: "cfb-storage"
       - name: Config Github name & email
-        if: success()
+        if: env.isNew == 'true'
         run: |
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
-        if: success()
+        if: env.isNew == 'true'
         run: |
           mkdir -p ${storage_channel_threads}
           cp -r ${tempspace}/* ${storage_channel_threads}/
