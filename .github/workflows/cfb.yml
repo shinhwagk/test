@@ -122,6 +122,15 @@ jobs:
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
       storage_channel_threads_error: storage/${{matrix.channel_id}}/threads_error
     steps:
+      - run: |
+          sudo apt-get install -y chromium-browser
+          chromium-browser --headless --remote-debugging-port=9222 &
+          sleep 5
+          l1=`curl -s http://127.0.0.1:9222/json/version | grep 'webSocketDebuggerUrl' | grep -v grep`
+          l2=${l1##*/}
+          uuid=`echo ${l2:: -1}`
+          echo $uuid
+          echo ::set-env name=uuid::$uuid
       - uses: actions/checkout@v2
         with:
           path: bin
