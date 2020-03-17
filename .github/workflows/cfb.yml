@@ -32,7 +32,7 @@ jobs:
           l2=${l1##*/}
           uuid=`echo ${l2:: -1}`
           echo $uuid
-          echo ::set-env name=::$uuid
+          echo ::set-env name=uuid::$uuid
       - name: Checkout cfb bin
         uses: actions/checkout@v2
         with:
