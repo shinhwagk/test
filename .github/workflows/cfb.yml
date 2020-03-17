@@ -168,7 +168,8 @@ jobs:
       - name: Crawlar Threads
         run: |
           set +e
-          find ${tempspace_threads} -maxdepth 1 -type d ! -path ${tempspace_threads} | while read thread_folder; do
+          function c_thread() {
+            thread_folder=${1}
             tid=${thread_folder##*/}
             echo "$tid $thread_folder `pwd`"
             startT=`date +%s`
@@ -186,8 +187,12 @@ jobs:
             if [ $RC == 127 ]; then
               echo "$tid error 127"
               mv ${storage_channel_threads}/${tid}.json.enc ${storage_channel_threads_error}/
-            fi
-          done
+            fi          
+          }
+          while read thread_folder; do
+            c_thread $thread_folder &
+          done <<< `find ${tempspace_threads} -maxdepth 1 -type d ! -path ${tempspace_threads}`
+          wait;
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc tempspace_threads
