@@ -33,6 +33,7 @@ jobs:
           uuid=`echo ${l2:: -1}`
           echo $uuid
           echo ::set-env name=uuid::$uuid
+      - run: curl http://127.0.0.1:9222/json/version
       - name: Checkout cfb bin
         uses: actions/checkout@v2
         with:
