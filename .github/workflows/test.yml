@@ -21,8 +21,12 @@ jobs:
 
       - run: sudo apt-get install -y chromium-browser
       - run: chromium-browser --headless --remote-debugging-port=9222 &
-      - run: ps aux |grep chromium-browser | grep -q -v grep
-      - run: curl -s http://127.0.0.1:9222/json/version | grep 'webSocketDebuggerUrl' | grep -v grep
+      - name: bowerser
+        run: |
+          l1=`curl -s http://127.0.0.1:9222/json/version | grep 'webSocketDebuggerUrl' | grep -v grep`
+          l2=${l1##*/}
+          uuid=`echo ${l2:: -1}`
+          echo ::set-output name=page::$uuid
 #       - uses: actions/setup-node@v1
 #       - run: npm i -g ts-node typescript
 #       - run: npm i
