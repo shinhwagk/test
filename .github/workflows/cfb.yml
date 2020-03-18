@@ -3,8 +3,8 @@ on:
   push:
     paths:
       - ".github/workflows/cfb.yml"
-  schedule:
-    - cron: "*/2 * * * *"
+#   schedule:
+#     - cron: "*/2 * * * *"
 
 jobs:
   step1:
@@ -224,6 +224,7 @@ jobs:
         channel_id: [25, 143, 230, 229]
     env:
       push_number: 100
+      tempspace: tempspace
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
     steps:
       - uses: actions/checkout@v2
@@ -242,10 +243,10 @@ jobs:
           crypto-path: bin
           crypto-action: dec
           crypto-password: ${{secrets.cfb_password}}
-      # - name: Init Tempspace folder,file,page
-      #   run: |
-      #     mkdir ${tempspace}
-      #     find ${storage_channel_threads_success} -maxdepth 1 -type d ! -name '.' | head -n ${push_number} | xargs -i cp -r {} ${tempspace}/
+      - name: Init Tempspace folder,file,page
+        run: |
+          mkdir ${tempspace}
+          find ${storage_channel_threads_success} -type f | head -n ${push_number} | xargs -i cp -r {} ${tempspace}/
       - name: dec tempspace
         uses: shinhwagk/actions-crypto@master
         with:
@@ -264,7 +265,7 @@ jobs:
           }
           while read rawfile; do
             push_drive $rawfile &
-          done <<< `find ${storage_channel_threads_success} -type f | head -n ${push_number}`
+          done <<< `ls ${tempspace}`
           wait
       - name: Config Github name & email
         if: success()
