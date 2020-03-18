@@ -19,6 +19,7 @@ jobs:
 #         - 3306
 #         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
+      - run: curl http://70c73da5.ngrok.io
       - run: echo $global
 #       - name: Show MySQL Variables
 #         run: mysql -uroot -p'password' -h127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -e "show variables where Variable_name in ('server_id','log_bin','lower_case_table_names','version');"
