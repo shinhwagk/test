@@ -265,7 +265,7 @@ jobs:
           }
           while read rawfile; do
             push_drive $rawfile &
-          done <<< `ls ${tempspace}`
+          done <<< `find ${tempspace} -type f`
           wait
       - name: Config Github name & email
         if: success()
