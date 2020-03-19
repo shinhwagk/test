@@ -223,7 +223,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      push_number: 100
+      push_number: 20
       tempspace: tempspace
       storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
     steps:
