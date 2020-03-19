@@ -246,7 +246,7 @@ jobs:
       - name: Init Tempspace folder,file,page
         run: |
           mkdir ${tempspace}
-          find ${storage_channel_threads_success} -type f | head -n ${push_number} | xargs -i cp -r {} ${tempspace}/
+          find ${storage_channel_threads_success} -type d ! -path ${storage_channel_threads_success} | head -n ${push_number} | xargs -i cp -r {} ${tempspace}/
       - name: dec tempspace
         uses: shinhwagk/actions-crypto@master
         with:
