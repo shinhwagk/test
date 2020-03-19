@@ -259,12 +259,12 @@ jobs:
             echo "push $1"
             startT=`date +%s`
             rfpath=`dirname ${1}`; thread_id=${rfpath##*/}; file_name=`basename $1`
-            python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${1}" && rm -f ${storage_channel_threads_success}/${thread_id}/${file_name}
+            python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${1}"
             endT=`date +%s`;
             echo "push time $(($endT-$startT))"
           }
           while read rawfile; do
-            push_drive $rawfile &
+            push_drive $rawfile && rm -f $rawfile &
           done <<< `find ${tempspace} -type f`
           wait
       - name: Config Github name & email
