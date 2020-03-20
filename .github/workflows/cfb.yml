@@ -200,18 +200,19 @@ jobs:
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc tempspace_threads
+        if: success() || cancelled()
         uses: shinhwagk/actions-crypto@master
         with:
           crypto-path: ${{env.tempspace_threads}}
           crypto-action: enc
           crypto-password: ${{secrets.cfb_password}}
       - name: Config Github name & email
-        if: success()
+        if: success() || cancelled()
         run: |
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
-        if: cancelled()
+        if: success() || cancelled()
         run: |
           mkdir -p ${storage_channel_threads_success}
           cp -r ${tempspace_threads}/* ${storage_channel_threads_success}/ && cd storage
@@ -281,11 +282,12 @@ jobs:
           done <<< `find ${tempspace} -type f`
           wait
       - name: Config Github name & email
+        if: success() || cancelled()
         run: |
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
-        if: cancelled()
+        if: success() || cancelled()
         run: |
           cd storage;
           git add -A
