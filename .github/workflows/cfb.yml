@@ -274,6 +274,7 @@ jobs:
             fi
           done <<< `find ${tempspace} -type f`
           wait
+          cd storage && git status -s
       - name: Config Github name & email
         if: success()
         run: |
