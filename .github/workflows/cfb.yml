@@ -211,6 +211,7 @@ jobs:
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
+        if: cancelled()
         run: |
           mkdir -p ${storage_channel_threads_success}
           cp -r ${tempspace_threads}/* ${storage_channel_threads_success}/ && cd storage
