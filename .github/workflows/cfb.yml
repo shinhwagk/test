@@ -8,6 +8,13 @@ on:
 
 jobs:
   step1:
+    services:
+      database:
+        image: mysql:8
+        ports: 
+          - 3306
+        env:
+          MYSQL_ROOT_PASSWORD: 123456
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -217,7 +224,7 @@ jobs:
           done
   step3:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -277,6 +284,7 @@ jobs:
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
+        if: cancelled()
         run: |
           cd storage;
           git add -A
