@@ -282,7 +282,7 @@ jobs:
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
       - name: push
         run: |
-          cd storage
+          cd storage; ls -la ; echo a> a;
           git add -A
           git status -s
           [ `git status -s | wc -l` != 0 ] && \
