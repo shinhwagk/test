@@ -257,19 +257,16 @@ jobs:
       - name: push drive
         run: |
           function push_drive() {
-            startT=`date +%s`
             rfpath=`dirname ${1}`; thread_id=${rfpath##*/}; file_name=`basename $1`
             echo "push args: ${{matrix.channel_id}} ${thread_id} ${1}"
             python ./bin/push.py ${{matrix.channel_id}} ${thread_id} "${1}"
-            endT=`date +%s`;
-            echo "push time $(($endT-$startT))"
           }
           parl=0
           while read rawfile; do
             let parl+=1
             source_file=${rawfile/$tempspace/$storage_channel_threads_success}
             echo $source_file
-            push_drive $rawfile && ls -l $source_file && rm -f $source_file && ls -l $source_file &
+            ls -l $source_file && push_drive $rawfile && rm -f $source_file && ls -l $source_file &
             if [ $parl == 10 ]; then
               wait; parl=0; sleep 1;
             fi
