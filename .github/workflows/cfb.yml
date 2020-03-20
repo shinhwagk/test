@@ -269,7 +269,7 @@ jobs:
             let parl+=1
             source_file=${rawfile/$tempspace/$storage_channel_threads_success}
             echo $source_file
-            push_drive $rawfile && rm -f $source_file &
+            push_drive $rawfile && ls -l $source_file && rm -f $source_file && ls -l $source_file &
             if [ $parl == 10 ]; then
               wait; parl=0; sleep 1;
             fi
