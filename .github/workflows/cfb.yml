@@ -161,7 +161,7 @@ jobs:
         id: init
         run: |
           mkdir -p ${tempspace_threads} ${storage_channel_threads_success} ${storage_channel_threads_error}
-          find ${storage_channel_threads} -type f | head -n ${thread_number} | while read thread_file; do
+          find ${storage_channel_threads} -type f | sort -r | head -n ${thread_number} | while read thread_file; do
             meta_file=`basename ${thread_file}`
             thread_id=${meta_file::-9}
             mkdir -p "${tempspace_threads}/${thread_id}"
