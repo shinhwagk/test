@@ -235,6 +235,7 @@ jobs:
         with:
           path: storage
           ref: "cfb-storage"
+      - run: cd storage; git log HEAD^
       - uses: actions/setup-python@v1
       - run: pip install requests
       - name: dec bin
@@ -275,6 +276,7 @@ jobs:
           done <<< `find ${tempspace} -type f`
           wait
           cd storage && git status -s
+          cd storage; git log HEAD^
       - name: Config Github name & email
         if: success()
         run: |
