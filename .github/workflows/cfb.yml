@@ -276,6 +276,7 @@ jobs:
           done <<< `find ${tempspace} -type f`
           wait
           pwd; ls -la; cd storage; ls -lah ;git log;git status -s;
+          echo b>b
       - name: Config Github name & email
         run: |
           git config --global user.name ${GITHUB_ACTOR}
