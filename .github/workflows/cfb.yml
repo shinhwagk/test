@@ -235,7 +235,7 @@ jobs:
         with:
           path: storage
           ref: "cfb-storage"
-      - run: cd storage; ls -lah ;git log HEAD^
+      - run: cd storage; ls -lah ;git log;
       - uses: actions/setup-python@v1
       - run: pip install requests
       - name: dec bin
