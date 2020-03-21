@@ -166,6 +166,7 @@ jobs:
             thread_id=${meta_file::-9}
             mkdir -p "${tempspace_threads}/${thread_id}"
           done
+          ls -l ${tempspace_threads}
       - name: dec tempspace threads
         uses: shinhwagk/actions-crypto@master
         with:
@@ -174,6 +175,7 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: Crawlar Threads
         run: |
+          ls -l ${tempspace_threads}
           set +e
           function c_thread() {
             thread_folder=${1}
