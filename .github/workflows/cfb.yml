@@ -76,6 +76,7 @@ jobs:
             fi
           done
           echo "crawlar page: $page"
+          ls ${tempspace_threads}
         env:
           channel_id: ${{ matrix.channel_id }}
       - name: enc tempspace threads
