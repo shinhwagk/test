@@ -287,10 +287,11 @@ jobs:
             push_drive $rawfile && rm -f "${source_file}.enc" &
             if [ $parl == 10 ]; then
               wait; parl=0; sleep 1;
+              bash bin/push.sh storage "channel ${{ matrix.channel_id }} push ${push_number}"
             fi
-            bash bin/push.sh storage "channel ${{ matrix.channel_id }} push ${push_number}"
           done <<< `find ${tempspace} -type f`
           wait
+          bash bin/push.sh storage "channel ${{ matrix.channel_id }} push ${push_number}"
       - name: push
         if: success() || cancelled()
         run: |
