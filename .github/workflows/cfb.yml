@@ -165,6 +165,7 @@ jobs:
             meta_file=`basename ${thread_file}`
             thread_id=${meta_file::-9}
             mkdir -p "${tempspace_threads}/${thread_id}"
+            cp ${thread_file} ${tempspace_threads}/${thread_id}/
           done
           ls -l ${tempspace_threads}
       - name: dec tempspace threads
