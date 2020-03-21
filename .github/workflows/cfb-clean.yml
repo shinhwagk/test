@@ -19,8 +19,7 @@ jobs:
           ref: "cfb-storage@${{matrix.channel_id}}"
       - run: |
           cd storage;
-          mv ${{matrix.channel_id}}/* ./
-          rm -fr ${{matrix.channel_id}}/
+          rm -fr ${{matrix.channel_id}}
           
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
