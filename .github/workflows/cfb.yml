@@ -175,7 +175,7 @@ jobs:
           crypto-password: ${{secrets.cfb_password}}
       - name: Crawlar Threads
         run: |
-          ls -l ${tempspace_threads}
+          find ${tempspace_threads} -type f
           set +e
           function c_thread() {
             thread_folder=${1}
