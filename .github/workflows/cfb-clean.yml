@@ -7,7 +7,7 @@ on:
 jobs:
   step1:
     runs-on: ubuntu-latest
-    strategy:
+#     strategy:
 #       fail-fast: false
 #       matrix:
 #         channel_id: [25, 143, 230, 229]
