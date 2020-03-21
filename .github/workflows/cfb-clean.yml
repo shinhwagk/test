@@ -7,19 +7,20 @@ on:
 jobs:
   step1:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        channel_id: [25, 143, 230, 229]
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         channel_id: [25, 143, 230, 229, 58]
     steps:
       - name: create branch
         uses: actions/checkout@v2
         with:
           path: storage
-          ref: "cfb-storage@${{matrix.channel_id}}"
+          ref: "cfb-storage@25"
       - run: |
           cd storage;
-          rm -fr ${{matrix.channel_id}}
+          rm -fr ./*
+          git checkout -b cfb-storage@58
           
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
