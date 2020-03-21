@@ -90,7 +90,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: storage
-          ref: "cfb-storage@${{matrix.channel_id}}"
+          ref: "refs/heads/cfb-storage@${{matrix.channel_id}}"
       - name: Config Github name & email
         if: env.isNew == 'true'
         run: |
@@ -145,7 +145,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: storage
-          ref: "cfb-storage@${{matrix.channel_id}}"
+          ref: "refs/heads/cfb-storage@${{matrix.channel_id}}"
       - uses: actions/setup-node@v1
       - name: Install Dependencies
         run: |
