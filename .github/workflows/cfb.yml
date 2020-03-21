@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        channel_id: [25, 143, 230, 229]
+        channel_id: [25, 143, 230, 229, 58, 77]
     env:
       page_number: 30
       tempspace: tempspace
