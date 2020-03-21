@@ -235,7 +235,6 @@ jobs:
             echo "retry ${i}."
           done
   step3:
-    needs: [step2]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
