@@ -121,7 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        channel_id: [25, 143, 230, 229]
+        channel_id: [25, 143, 230, 229, 58, 77]
     env:
       thread_number: 10
       tempspace: tempspace
@@ -236,7 +236,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        channel_id: [25, 143, 230, 229]
+        channel_id: [25, 143, 230, 229, 58, 77]
     env:
       push_number: 10
       tempspace: tempspace
