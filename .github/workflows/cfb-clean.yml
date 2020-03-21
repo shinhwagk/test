@@ -8,9 +8,9 @@ jobs:
   step1:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
-      matrix:
-        channel_id: [25, 143, 230, 229]
+#       fail-fast: false
+#       matrix:
+#         channel_id: [25, 143, 230, 229]
     steps:
       - name: create branch
         uses: actions/checkout@v2
