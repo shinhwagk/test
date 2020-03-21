@@ -21,11 +21,15 @@ jobs:
           cd storage;
           rm -fr ./*
           git checkout -b cfb-storage@58
-          
           git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${GITHUB_ACTOR}@my-domain.io
           git add -A; git commit -m "save"
-          git push
+          git push --set-upstream origin cfb-storage@58
+          git checkout -b cfb-storage@77
+          git config --global user.name ${GITHUB_ACTOR}
+          git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+          git add -A; git commit -m "save"
+          git push --set-upstream origin cfb-storage@77
 #       - name: Checkout cfb storage
 #         if: success()
 #         uses: actions/checkout@v2
