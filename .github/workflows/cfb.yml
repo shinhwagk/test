@@ -26,10 +26,10 @@ jobs:
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       tempspace_page: tempspace/page
-      storage_channel: storage/${{matrix.channel_id}}
-      storage_channel_threads: storage/${{matrix.channel_id}}/threads
-      storage_channel_page: storage/${{matrix.channel_id}}/page
-      channel_page_url: https://raw.githubusercontent.com/shinhwagk/test/cfb-storage/${{matrix.channel_id}}/page
+      storage_channel: storage
+      storage_channel_threads: storage/threads
+      storage_channel_page: storage/page
+      channel_page_url: https://raw.githubusercontent.com/shinhwagk/test/cfb-storage@${{matrix.channel_id}}/page
     steps:
       - run: |
           sudo apt-get install -y chromium-browser
@@ -124,10 +124,10 @@ jobs:
       thread_number: 100
       tempspace: tempspace
       tempspace_threads: tempspace/threads
-      storage_channel: storage/${{matrix.channel_id}}
-      storage_channel_threads: storage/${{matrix.channel_id}}/threads
-      storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
-      storage_channel_threads_error: storage/${{matrix.channel_id}}/threads_error
+      storage_channel: storage
+      storage_channel_threads: storage/threads
+      storage_channel_threads_success: storage/threads_success
+      storage_channel_threads_error: storage/threads_error
     steps:
       - run: |
           sudo apt-get install -y chromium-browser
@@ -234,7 +234,7 @@ jobs:
     env:
       push_number: 30
       tempspace: tempspace
-      storage_channel_threads_success: storage/${{matrix.channel_id}}/threads_success
+      storage_channel_threads_success: storage/threads_success
     steps:
       - uses: actions/checkout@v2
         with:
