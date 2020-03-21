@@ -121,7 +121,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      thread_number: 100
+      thread_number: 1
       tempspace: tempspace
       tempspace_threads: tempspace/threads
       storage_channel: storage
@@ -234,7 +234,7 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     env:
-      push_number: 30
+      push_number: 1
       tempspace: tempspace
       storage_channel_threads_success: storage/threads_success
     steps:
