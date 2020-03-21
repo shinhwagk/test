@@ -181,6 +181,7 @@ jobs:
               wait; parl=0; sleep 1;
               bash bin/push.sh storage "channel ${{ matrix.channel_id }} push ${push_number}"
             fi
+            sleep 1
           done <<< `find ${tempspace} -type f`
           wait
           bash bin/push.sh storage "channel ${{ matrix.channel_id }} push ${push_number}"
