@@ -12,6 +12,17 @@ jobs:
       matrix:
         channel_id: [25, 143, 230, 229]
     steps:
+      - name: create branch
+        uses: actions/checkout@v2
+        with:
+          path: storage
+          ref: "cfb-storage"
+      - run: |
+          cd storage;
+          git checkout -b cfb-storage@25
+          rm -fr 143 229 230
+          git add -A; git commit -m "save"
+          git push
       - name: Checkout cfb storage
         if: success()
         uses: actions/checkout@v2
